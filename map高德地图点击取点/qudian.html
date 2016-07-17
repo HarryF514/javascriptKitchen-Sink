@@ -21,7 +21,7 @@
     <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
 </head>
 <body>
-<div id="container"></div>
+<div id="container" style="width: 100%;height: 300px"></div>
 <div  class="button-group">
     <input type="button" class="button" value="添加点标记覆盖物" id="addMarker"/>
     <input type="button" class="button" value="更新点标记覆盖物" id="updateMarker"/>
@@ -30,7 +30,7 @@
 <script>
     var marker, map = new AMap.Map("container", {
         resizeEnable: true,
-        center: [116.397428, 39.90923],
+        //center: [116.397428, 39.90923],
         zoom: 13
     });
 
