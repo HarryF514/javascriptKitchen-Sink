@@ -21,13 +21,25 @@ sheet_name_list.forEach(function(y) { /* iterate through sheets */
     var schoolArray = getUniqueField(worksheet,"最新高校名称");
     if(schoolArray.length > 1){
         console.log('has more than one school');
-        return;
+        //return;
     }
-    createAVObj({
-        name:schoolArray[0],
-        author:AV.Object.createWithoutData('_User', '5781db5ed342d30057ce9aab')
-    },function(schoolObj){
-
+    //createAVObj([{
+    //    name:"school1",
+    //    author:AV.Object.createWithoutData('_User', '5781db5ed342d30057ce9aab')
+    //},{
+    //    name:"school2",
+    //    author:AV.Object.createWithoutData('_User', '5781db5ed342d30057ce9aab')
+    //}],[]);
+    var schoolArrayObj = _.map(schoolArray, function(num){ return {
+        name:num
+    }; });
+    var avarray = makeAVObject(schoolArrayObj);
+    AV.Object.saveAll(avarray).then(function (avobjs) {
+        //console.log(avobjs);
+        var kvpair = makeKeyValuePair(avobjs);
+        console.log(kvpair);
+    }, function (error) {
+        console.log(error);
     });
     return;
     var uniquePropertyArray = _.uniq(workSheetJsonArray, function(x){
@@ -49,8 +61,27 @@ sheet_name_list.forEach(function(y) { /* iterate through sheets */
     }
 });
 
+function makeAVObject(SchoolNameArray){
+    var avObjArray = [];
+    _.each(SchoolNameArray,function(element,index,list){
+        var TodoFolder = AV.Object.extend('xyqSchool');
+        var todoFolder = new TodoFolder();
+        todoFolder.set('name',element.name);
+        todoFolder.set('author',AV.Object.createWithoutData('_User', '5781db5ed342d30057ce9aab'));
+        avObjArray.push(todoFolder);
+    });
+    return avObjArray;
+}
 
-function makeKeyValuePair(){
+function makeKeyValuePair(AvobjectArray){
+    var kv = {};
+    _.each(AvobjectArray,function(element,index,list){
+        kv[element.attributes.name] = element.id;
+    });
+    return kv;
+}
+
+function extendCurrentArray(_workSheetJsonArray){
 
 }
 
@@ -58,16 +89,25 @@ function  checkExist(){
 
 }
 
-function createAVObj(obj,callback){
+
+function createAVObj(objArray,schoolKeyValue){
     var Todo = AV.Object.extend('xyqSchool');
     var todo = new Todo();
-    todo.save(obj).then(function (todo) {
-       if(callback){
-           return callback(todo);
-       }
-    }, function (error) {
-        console.log('createAVObj error message: ' + error.message);
-    });
+    if(objArray.length > 0){
+        todo.save(objArray[objArray.length - 1]).then(function (todo) {
+            var schoolKeyValue = {};
+            schoolKeyValue[todo.attributes.name] = todo.id;
+            objArray.pop();
+            if(objArray.length > 0){
+                createAVObj(objArray);
+            }else{
+                console.log(schoolKeyValue);
+            }
+        }, function (error) {
+            console.log('createAVObj error message: ' + error.message);
+        });
+    }
+
 }
 
 function getUniqueField(worksheet,key){
