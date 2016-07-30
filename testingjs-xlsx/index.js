@@ -20,7 +20,7 @@ sheet_name_list.forEach(function(y) { /* iterate through sheets */
     var workSheetJsonArray = XLSX.utils.sheet_to_json(worksheet);
     var schoolArray = getUniqueField(worksheet,"最新高校名称");
     if(schoolArray.length > 1){
-        console.log('has more than one school');
+        //console.log('has more than one school');
         //return;
     }
     //createAVObj([{
@@ -37,7 +37,14 @@ sheet_name_list.forEach(function(y) { /* iterate through sheets */
     AV.Object.saveAll(avarray).then(function (avobjs) {
         //console.log(avobjs);
         var kvpair = makeKeyValuePair(avobjs);
-        console.log(kvpair);
+        _.each(workSheetJsonArray,function(element,index,list){
+            var schoolIdObj = {
+                schoolId:kvpair[element['最新高校名称']]
+            }
+
+            _.extend(element,schoolIdObj);
+        });
+        console.log(workSheetJsonArray);
     }, function (error) {
         console.log(error);
     });
