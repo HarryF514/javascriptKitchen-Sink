@@ -1,5 +1,5 @@
 {
-  "name": "testingjs-xlsx",
+  "name": "nodejsmulter",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,9 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.14.0",
     "formidable": "^1.0.17",
-    "leanengine": "^0.4.2",
-    "underscore": "^1.8.3",
+    "multer": "^1.1.0",
     "xlsx": "^0.8.0"
   }
 }

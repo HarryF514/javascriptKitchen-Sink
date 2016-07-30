@@ -10,7 +10,7 @@
 if(typeof require !== 'undefined') XLSX = require('xlsx');
 var _ = require('underscore');
 var AV = require('leanengine');
-var workbook = XLSX.readFile('excelData.xlsx');
+var workbook = XLSX.readFile('http://ac-oasq3bau.clouddn.com/e6d22909123e97e3.xlsx');
 var sheet_name_list = workbook.SheetNames;
 //console.log(sheet_name_list[0]);
 AV.initialize("OAsq3BaUejlty6HR5y6LtoOA-gzGzoHsz", "rY459mImPgBLwM4H78n3lbzI");
@@ -30,26 +30,7 @@ sheet_name_list.forEach(function(y) { /* iterate through sheets */
                 });
             });
         });
-    })
-
-    return;
-    var uniquePropertyArray = _.uniq(workSheetJsonArray, function(x){
-        return x['学院']+x['专业'];
     });
-    console.log(uniquePropertyArray);
-    console.log(uniquePropertyArray.length);
-    saveSchool(function(schoolId){
-
-    });
-
-    console.log(getUniqueField(worksheet,"专业"));
-    console.log(getUniqueField(worksheet,"学院"));
-    return;
-    for (z in worksheet) {
-        /* all keys that do not begin with "!" correspond to cell addresses */
-        if(z[0] === '!') continue;
-        //console.log(y + "!" + z + "=" + JSON.stringify(worksheet[z].v));
-    }
 });
 
 function saveAllSchool(workSheetJsonArray,callback){
@@ -190,43 +171,9 @@ function makeKeyValuePair(AvobjectArray){
     return kv;
 }
 
-function extendCurrentArray(_workSheetJsonArray){
-
-}
-
-function  checkExist(){
-
-}
-
-
-function createAVObj(objArray,schoolKeyValue){
-    var Todo = AV.Object.extend('xyqSchool');
-    var todo = new Todo();
-    if(objArray.length > 0){
-        todo.save(objArray[objArray.length - 1]).then(function (todo) {
-            var schoolKeyValue = {};
-            schoolKeyValue[todo.attributes.name] = todo.id;
-            objArray.pop();
-            if(objArray.length > 0){
-                createAVObj(objArray);
-            }else{
-                console.log(schoolKeyValue);
-            }
-        }, function (error) {
-            console.log('createAVObj error message: ' + error.message);
-        });
-    }
-
-}
 
 function getUniqueField(thejson,key){
     var schoolName = _.pluck(thejson, key);
     var uniqueSchoolName = _.uniq(schoolName);
     return uniqueSchoolName;
-}
-
-function saveSchool(callback){
-    if(callback){
-        callback("5781dcf31532bc005f3ffe64");
-    }
 }
