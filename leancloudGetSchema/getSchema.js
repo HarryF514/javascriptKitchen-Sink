@@ -1,9 +1,9 @@
 var request = require('request');
 var md5 = require('md5');
 
-var appId = "lCJUTtFR0fy55NddqvfQyXfw-gzGzoHsz";
-var appKey = "cLrB4KiuJw9PubqJi8uiopAv";
-var masterKey = "7A0J0DvQxjniGvd2rl9u2BGE";
+var appId = "Kw627Ha1JP32IUOymijqLJe1-gzGzoHsz";
+var appKey = "PlUKtpbqSLVs46xWPrMYXDNn";
+var masterKey = "PdcRl6OLQ1jljTy5oTJkBenK";
 var sign = md5(Date.now() + masterKey)
 console.log(Date.now());
 console.log(sign);
