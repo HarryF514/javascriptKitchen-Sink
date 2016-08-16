@@ -3,12 +3,14 @@ var md5 = require('md5');
 
 var diff = require('deep-diff').diff;
 
+//
 var dbInfoA = {
-    appId:"Kw627Ha1JP32IUOymijqLJe1-gzGzoHsz",
-    appKey:"PlUKtpbqSLVs46xWPrMYXDNn",
-    masterKey:"PdcRl6OLQ1jljTy5oTJkBenK"
+    appId:"3SK2AEoHGRDYVJ2R89GPfe2L-gzGzoHsz",
+    appKey:"MSku8mnEFRRIeg4DJqU6K0Ow",
+    masterKey:"ExigflXqpOI9vLftJB56prnL"
 };
 
+// development
 var dbInfoB = {
     appId:"OAsq3BaUejlty6HR5y6LtoOA-gzGzoHsz",
     appKey:"rY459mImPgBLwM4H78n3lbzI",
