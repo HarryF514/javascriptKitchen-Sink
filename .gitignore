@@ -10,3 +10,4 @@ start.sh
 .idea/*.avoscloud/
 .avoscloud/
 .avoscloud/
+npm-debug.log
