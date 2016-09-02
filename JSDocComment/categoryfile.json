@@ -1,0 +1,8 @@
+{
+    "category" : {
+        "displayName" : "Main-level category"
+    },
+    "category/subcategory" : {
+        "displayName" : "A subcategory of 'category'"
+    }
+}
