@@ -10,6 +10,40 @@ var dbInfoA = {
     masterKey:"IrPa4q9b5e6Rby0aL1yke4yn"
 };
 
+function findDuplicatesWordInArray(userJsonArray){
+    var str = JSON.stringify(userJsonArray);
+    //console.log(str);
+    function countWords(sentence) {
+        var index = {},
+            words = sentence
+                .replace(/[.,?!;()"'-]/g, " ")
+                .replace(/\s+/g, " ")
+                .toLowerCase()
+                .split(" ");
+
+        words.forEach(function (word) {
+            if (!(index.hasOwnProperty(word))) {
+                index[word] = 0;
+            }
+            index[word]++;
+        });
+
+        return index;
+    }
+    var duplicatesWord = countWords(str);
+    for(key in duplicatesWord){
+        if(duplicatesWord[key] == 3){
+            console.log(key + ":" + duplicatesWord[key]);
+        }
+    }
+
+    for(key in duplicatesWord){
+        if(duplicatesWord[key] == 2){
+            console.log(key + ":" + duplicatesWord[key]);
+        }
+    }
+}
+
 function makeRequestOption(appId,appKey,masterKey){
     var sign = md5(Date.now() + masterKey)
     var signedTimeKey = sign + "," + Date.now() + "," + "master";
@@ -29,13 +63,16 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
 
     if (!error && response.statusCode == 200) {
         var firstSchema = JSON.parse(body);
-        console.log(firstSchema.ndGuestUser);
-        console.log(Object.keys(firstSchema.ndGuestUser)[1]);
-        console.log(Object.keys(firstSchema.ndGuestUser)[1] + " | " + JSON.stringify(firstSchema.ndGuestUser[Object.keys(firstSchema.ndGuestUser)[1]]['comment']) + "| " + JSON.stringify(firstSchema.ndGuestUser[Object.keys(firstSchema.ndGuestUser)[1]]['type']));
+        //console.log(firstSchema);
+       // return;
+        //console.log(firstSchema.ndGuestUser);
+        //console.log(Object.keys(firstSchema.ndGuestUser)[1]);
+        //console.log(Object.keys(firstSchema.ndGuestUser)[1] + " | " + JSON.stringify(firstSchema.ndGuestUser[Object.keys(firstSchema.ndGuestUser)[1]]['comment']) + "| " + JSON.stringify(firstSchema.ndGuestUser[Object.keys(firstSchema.ndGuestUser)[1]]['type']));
         var jsonArray = [];
-
-        for(i=0;i<20;i++){
+        var userJsonArray = [];
+        for(i=0;i<50;i++){
             var json = {};
+            var userJson = {};
             for(key in firstSchema){
                 if(firstSchema[key][Object.keys(firstSchema[key])[i]]&&firstSchema[key][Object.keys(firstSchema[key])[i]]['comment']){
                     var comment = firstSchema[key][Object.keys(firstSchema[key])[i]]['comment'];
@@ -43,32 +80,30 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
                 if(firstSchema[key][Object.keys(firstSchema[key])[i]]&&firstSchema[key][Object.keys(firstSchema[key])[i]]['type']){
                     var type = firstSchema[key][Object.keys(firstSchema[key])[i]]['type'];
                 }
-                if(comment != ""){
-                    json[key] = Object.keys(firstSchema[key])[i] + " | " + JSON.stringify(comment) + "| " + JSON.stringify(type);
+                if(firstSchema[key][Object.keys(firstSchema[key])[i]]&&firstSchema[key][Object.keys(firstSchema[key])[i]]['className']){
+                    var className = firstSchema[key][Object.keys(firstSchema[key])[i]]['className'];
+                    console.log(className);
+                }
+                if(Object.keys(firstSchema[key])[i] != undefined){
+                    json[key] ="参数: " +  Object.keys(firstSchema[key])[i] + " |注解: " + JSON.stringify(comment) + " |类型: " + JSON.stringify(type) + " |指向类: " + JSON.stringify(className);
+                    if(key == "ndGuestUser" | key == "ndShangHuUser" | key == "ndTalentUser"){
+                        userJson[key] = Object.keys(firstSchema[key])[i] + " | " + JSON.stringify(comment) + "| " + JSON.stringify(type);
+
+                    }
                 }
                 comment = "";
                 type = "";
+                className = "";
             }
             jsonArray.push(json);
+            userJsonArray.push(userJson);
         }
         console.log(jsonArray);
+        //findDuplicatesWordInArray(userJsonArray);
+        return;
         //return;
         var json2xls = require('json2xls');
         var fs = require('fs');
-
-        var json = {
-            foo: 'bar',
-            qux: 'moo',
-            poo: 123,
-            stux: new Date()
-        }
-
-        var json2 = {
-            foo: 'bar',
-            qux: 'moo',
-            stux: new Date()
-        }
-
         var xls = json2xls(jsonArray);
 
         fs.writeFileSync('data1.xlsx', xls, 'binary');
@@ -78,3 +113,4 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
     }
 });
 // json to excel;
+
