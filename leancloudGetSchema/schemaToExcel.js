@@ -98,9 +98,8 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
             jsonArray.push(json);
             userJsonArray.push(userJson);
         }
-        console.log(jsonArray);
+        //console.log(jsonArray);
         //findDuplicatesWordInArray(userJsonArray);
-        return;
         //return;
         var json2xls = require('json2xls');
         var fs = require('fs');
