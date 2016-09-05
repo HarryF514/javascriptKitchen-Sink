@@ -76,9 +76,9 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
         var keysCounter = 0;
         function go(){
             var modelName = Object.keys(firstSchema)[keysCounter];
-            if(modelName.indexOf('_') == 0){
-                modelName = modelName.split('_')[1];
-            }
+//            if(modelName.indexOf('_') == 0){
+//                modelName = modelName.split('_')[1];
+//            }
             makeHeaderFile(modelName,function(){
                 keysCounter++;
                 if(Object.keys(firstSchema).length > keysCounter){
@@ -93,10 +93,10 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
 
         function makeHeaderFile(modelName,callback){
             //var modelName = 'User'
-            fs.writeFile('headerFiles/' +  modelName+".m",'#import "'+modelName+'.h"' + '\n\n' + '@implementation '+modelName + '\n\n' + '@end');
+            fs.writeFile('headerFiles/' +  modelName + "Model" + ".m",'#import "'+modelName+ "Model"+'.h"' + '\n\n' + '@implementation '+modelName+ "Model" + '\n\n' + '@end');
 
-            fs.writeFile('headerFiles/' +  modelName+".h", "#import <Foundation/Foundation.h>", function(err) {
-                fs.appendFile('headerFiles/' + modelName+'.h', '\n\n@interface ' + modelName + ' : ' + 'NSObject', function (err) {
+            fs.writeFile('headerFiles/' +  modelName+ "Model"+".h", "#import <Foundation/Foundation.h>", function(err) {
+                fs.appendFile('headerFiles/' + modelName+ "Model"+'.h', '\n\n@interface ' + modelName+ "Model" + ' : ' + 'NSObject', function (err) {
                     for(var thekey in firstSchema[modelName]){
                         var dataType = dataTypeMapping[firstSchema[modelName][thekey]['type']];
                         if(thekey == 'createdAt'){
@@ -113,57 +113,19 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
                         }
 
                         if(dataType != undefined){
-                            fs.appendFile('headerFiles/' + modelName+'.h', '\n' + brief + '\n' + '@property(nonatomic,copy)' + dataType + ' *' +thekey+';');
+                            fs.appendFile('headerFiles/' + modelName+ "Model"+'.h', '\n' + brief + '\n' + '@property(nonatomic,copy)' + dataType + ' *' +thekey+';');
                         }else if(dataType == undefined && firstSchema[modelName][thekey]['type'] == 'Pointer'){
-                            var dataType = firstSchema[modelName][thekey]['className'];
-                            fs.appendFile('headerFiles/' + modelName+'.h', '\n' + brief + '\n' + '@property(nonatomic,copy)' + dataType + ' *' +thekey+';');
+                            var dataType = firstSchema[modelName][thekey]['className']+ "Model";
+                            fs.appendFile('headerFiles/' + modelName+ "Model"+'.h', '\n' + brief + '\n' + '@property(nonatomic,copy)' + dataType + ' *' +thekey+';');
                         }
                     }
-                    fs.appendFile('headerFiles/' + modelName+'.h', '\n\n' + '@end');
+                    fs.appendFile('headerFiles/' + modelName+ "Model"+'.h', '\n\n' + '@end');
                 })
             });
             if(callback){
                 callback();
             }
         }
-
-
-        return;
-        var jsonArray = [];
-        var userJsonArray = [];
-        for(i=0;i<50;i++){
-            var json = {};
-            var userJson = {};
-            for(key in firstSchema){
-                if(firstSchema[key][Object.keys(firstSchema[key])[i]]&&firstSchema[key][Object.keys(firstSchema[key])[i]]['comment']){
-                    var comment = firstSchema[key][Object.keys(firstSchema[key])[i]]['comment'];
-                }
-                if(firstSchema[key][Object.keys(firstSchema[key])[i]]&&firstSchema[key][Object.keys(firstSchema[key])[i]]['type']){
-                    var type = firstSchema[key][Object.keys(firstSchema[key])[i]]['type'];
-                }
-                if(firstSchema[key][Object.keys(firstSchema[key])[i]]&&firstSchema[key][Object.keys(firstSchema[key])[i]]['className']){
-                    var className = firstSchema[key][Object.keys(firstSchema[key])[i]]['className'];
-                    console.log(className);
-                }
-                if(Object.keys(firstSchema[key])[i] != undefined){
-                    json[key] ="参数: " +  Object.keys(firstSchema[key])[i] + " |注解: " + JSON.stringify(comment) + " |类型: " + JSON.stringify(type) + " |指向类: " + JSON.stringify(className);
-                    if(key == "ndGuestUser" | key == "ndShangHuUser" | key == "ndTalentUser"){
-                        userJson[key] = Object.keys(firstSchema[key])[i] + " | " + JSON.stringify(comment) + "| " + JSON.stringify(type);
-
-                    }
-                }
-                comment = "";
-                type = "";
-                className = "";
-            }
-            jsonArray.push(json);
-            userJsonArray.push(userJson);
-        }
-        //console.log(jsonArray);
-        //findDuplicatesWordInArray(userJsonArray);
-        //return;
-
-
 
     } else {
         console.log(JSON.stringify(error));
