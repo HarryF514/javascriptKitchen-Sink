@@ -73,8 +73,18 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
                         if(Object.keys(firstSchema[key])[i] == 'updatedAt' | Object.keys(firstSchema[key])[i] == 'createdAt'){
 
                         }else{
-                            jsonObj[key][Object.keys(firstSchema[key])[i]] = new Date();
+                            jsonObj[key][Object.keys(firstSchema[key])[i]] = {
+                                "__type": "Date",
+                                "iso": "2016-07-19T09:19:18.806Z"
+                            };
                         }
+                    }
+                    if(type == "File"){
+                        jsonObj[key][Object.keys(firstSchema[key])[i]] = {
+                            "__type": "Pointer",
+                            "className": "_File",
+                            "objectId": "57ed0dd80bd1d00058724ab6"
+                        };
                     }
                     if(type == "Array"){
                         jsonObj[key][Object.keys(firstSchema[key])[i]] = [];
@@ -87,7 +97,10 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
                         }
                     }
                     if(type == "Number"){
-                        jsonObj[key][Object.keys(firstSchema[key])[i]] = 1370222;
+                        jsonObj[key][Object.keys(firstSchema[key])[i]] = 0;
+                    }
+                    if(type == "Boolean"){
+                        jsonObj[key][Object.keys(firstSchema[key])[i]] = true;
                     }
                     if(type == "Pointer"){
                         //delete  jsonObj[key][Object.keys(firstSchema[key])[i]];
