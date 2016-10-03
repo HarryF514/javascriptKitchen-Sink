@@ -105,7 +105,7 @@ request(makeRequestOption(dbInfoA.appId,dbInfoA.appKey,dbInfoA.masterKey), funct
         var fs = require('fs');
         var xls = json2xls(jsonArray);
 
-        fs.writeFileSync('data1.xlsx', xls, 'binary');
+        fs.writeFileSync('xiaoyouquanDataBase.xlsx', xls, 'binary');
     } else {
         console.log(JSON.stringify(error));
         console.log(JSON.stringify(response));
