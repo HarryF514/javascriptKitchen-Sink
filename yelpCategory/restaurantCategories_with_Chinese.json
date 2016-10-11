@@ -1,0 +1,370 @@
+[
+  {
+    "alias": "asianfusion",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Asian Fusion",
+    "chineseTitle": "亚洲菜"
+  },
+  {
+    "alias": "australian",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Australian",
+    "chineseTitle": "澳洲菜"
+  },
+  {
+    "alias": "belgian",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Belgian",
+    "chineseTitle": "比利时菜"
+  },
+  {
+    "alias": "brazilian",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Brazilian",
+    "chineseTitle": "巴西菜"
+  },
+  {
+    "alias": "breakfast_brunch",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Breakfast & Brunch",
+    "chineseTitle": "早餐"
+  },
+  {
+    "alias": "buffets",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Buffets",
+    "chineseTitle": "自助餐"
+  },
+  {
+    "alias": "burgers",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Burgers",
+    "chineseTitle": "汉堡"
+  },
+  {
+    "alias": "chinese",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Chinese",
+    "chineseTitle": "中餐"
+  },
+  {
+    "alias": "creperies",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Creperies",
+    "chineseTitle": "休闲小憩"
+  },
+  {
+    "alias": "foodstands",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Food Stands",
+    "chineseTitle": "小食品店"
+  },
+  {
+    "alias": "french",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "French",
+    "chineseTitle": "法国菜"
+  },
+  {
+    "alias": "german",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "German",
+    "chineseTitle": "德国菜"
+  },
+  {
+    "alias": "gluten_free",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Gluten-Free",
+    "chineseTitle": "暂无"
+  },
+  {
+    "alias": "greek",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Greek",
+    "chineseTitle": "希腊菜"
+  },
+  {
+    "alias": "hotdog",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Hot Dogs",
+    "chineseTitle": "热狗"
+  },
+  {
+    "alias": "hotdogs",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Fast Food",
+    "chineseTitle": "快餐"
+  },
+  {
+    "alias": "hungarian",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Hungarian",
+    "chineseTitle": "匈牙利菜"
+  },
+  {
+    "alias": "indpak",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Indian",
+    "chineseTitle": "印度菜"
+  },
+  {
+    "alias": "irish",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Irish",
+    "chineseTitle": "爱尔兰菜"
+  },
+  {
+    "alias": "italian",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Italian",
+    "chineseTitle": "意大利菜"
+  },
+  {
+    "alias": "japanese",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Japanese",
+    "chineseTitle": "日本菜"
+  },
+  {
+    "alias": "korean",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Korean",
+    "chineseTitle": "韩国菜"
+  },
+  {
+    "alias": "latin",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Latin American",
+    "chineseTitle": "拉丁美洲"
+  },
+  {
+    "alias": "mediterranean",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Mediterranean",
+    "chineseTitle": "地中海"
+  },
+  {
+    "alias": "mexican",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Mexican",
+    "chineseTitle": "墨西哥"
+  },
+  {
+    "alias": "pakistani",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Pakistani",
+    "chineseTitle": "巴基斯坦"
+  },
+  {
+    "alias": "persian",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Persian/Iranian",
+    "chineseTitle": "波斯"
+  },
+  {
+    "alias": "pizza",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Pizza",
+    "chineseTitle": "披萨"
+  },
+  {
+    "alias": "raw_food",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Live/Raw Food",
+    "chineseTitle": "生食"
+  },
+  {
+    "alias": "russian",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Russian",
+    "chineseTitle": "俄罗斯菜"
+  },
+  {
+    "alias": "salad",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Salad",
+    "chineseTitle": "萨拉"
+  },
+  {
+    "alias": "sandwiches",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Sandwiches",
+    "chineseTitle": "三明治"
+  },
+  {
+    "alias": "seafood",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Seafood",
+    "chineseTitle": "海鲜"
+  },
+  {
+    "alias": "soup",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Soup",
+    "chineseTitle": "汤类"
+  },
+  {
+    "alias": "spanish",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Spanish",
+    "chineseTitle": "西班牙"
+  },
+  {
+    "alias": "steak",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Steakhouses",
+    "chineseTitle": "牛排"
+  },
+  {
+    "alias": "sushi",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Sushi Bars",
+    "chineseTitle": "寿司"
+  },
+  {
+    "alias": "syrian",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Syrian",
+    "chineseTitle": "叙利亚菜"
+  },
+  {
+    "alias": "tapasmallplates",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Tapas/Small Plates",
+    "chineseTitle": "小盘菜"
+  },
+  {
+    "alias": "thai",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Thai",
+    "chineseTitle": "泰国餐"
+  },
+  {
+    "alias": "tradamerican",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "American (Traditional)",
+    "chineseTitle": "美洲食物"
+  },
+  {
+    "alias": "turkish",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Turkish",
+    "chineseTitle": "土耳其菜"
+  },
+  {
+    "alias": "vegan",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Vegan",
+    "chineseTitle": "素食(无任何蛋白)"
+  },
+  {
+    "alias": "vegetarian",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Vegetarian",
+    "chineseTitle": "素食"
+  },
+  {
+    "alias": "vietnamese",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Vietnamese",
+    "chineseTitle": "越南菜"
+  },
+  {
+    "alias": "waffles",
+    "parents": [
+      "restaurants"
+    ],
+    "title": "Waffles",
+    "chineseTitle": "华夫饼"
+  }
+]
