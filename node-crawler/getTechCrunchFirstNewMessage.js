@@ -21,7 +21,7 @@ var c = new Crawler({
     cache:true,
     forceUTF8: true,
     onDrain:function(){
-      log("finished,no more queue");
+      log("a finished,no more queue");
     },
     callback: function (error, result, $) {
 
@@ -47,7 +47,8 @@ var cGetArtile = new Crawler({
     cache:true,
     forceUTF8: true,
     onDrain:function(){
-        log("finished,no more queue");
+        log("cGetArtile finished,no more queue");
+        return;
     },
     callback: function (error, result, $) {
 
@@ -71,9 +72,8 @@ var cGetArtile = new Crawler({
 
 function saveObj(obj){
     var tag = new AV.Object('techcrunchNews');
+    urlCounter=0;
     return tag.save(obj);
-
-
 }
 
 function startToCheckUrl(url){

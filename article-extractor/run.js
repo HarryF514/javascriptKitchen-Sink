@@ -4,6 +4,6 @@ var extractor = require('article-extractor');
 //    console.log(data);
 //});
 
-extractor.extractData('http://stackoverflow.com/questions/40588189/how-to-retrieve-data-for-radio-button-value-and-select-the-radio-button-from-sql', function (err, data) {
+extractor.extractData('https://techcrunch.com/2016/11/15/samantha-payne-of-open-bionics-3d-prosthetics-to-speak-at-disrupt-london-dec-5-6/', function (err, data) {
     console.log(data);
 });
