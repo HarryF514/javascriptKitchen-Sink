@@ -6,7 +6,7 @@ Parse.initialize("111");
 Parse.serverURL = 'http://localhost:1337/parse';
 
 function debugLog(s){
-    //console.log(s);
+    console.log(s);
 }
 
 var getAllItemsByClassName = {
