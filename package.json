@@ -1,0 +1,40 @@
+{
+  "name": "javascriptkitchensink",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "article-extractor": "^1.0.2",
+    "article-parser": "^1.5.3",
+    "baidumap": "^0.0.4",
+    "bingtranslator": "^0.0.7",
+    "crawler": "^0.4.3",
+    "google-translate": "^1.0.6",
+    "google-translate-api": "^2.2.2",
+    "jsonfile": "^2.4.0",
+    "kue": "^0.11.5",
+    "leanengine": "^0.4.2",
+    "memory-cache": "^0.1.6",
+    "node-cache": "^4.1.0",
+    "parse": "^1.9.2",
+    "redis": "^2.6.3",
+    "regex": "^0.1.1",
+    "underscore": "^1.8.3",
+    "unfluff": "^1.1.0",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harryyuanfeng/javascriptKitchen-Sink.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harryyuanfeng/javascriptKitchen-Sink/issues"
+  },
+  "homepage": "https://github.com/harryyuanfeng/javascriptKitchen-Sink"
+}

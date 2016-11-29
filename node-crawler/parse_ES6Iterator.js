@@ -14,6 +14,10 @@ function log(s) {
     //console.log(s);
 }
 
+function extraLog(s){
+    //console.log(s);
+}
+
 
 var getAllItemsByClassName = {
     counter:0,
@@ -49,7 +53,8 @@ var queueObj = {
     urlArray: [],
     patt: /(http:\/\/)/,
     queueingUrlNumber:0,
-    domainKeyWord:"http://world.huanqiu.com/",
+    domainKeyWord:"http://tech.huanqiu.com/",
+    staringUrl:"http://tech.huanqiu.com/",
     c: new Crawler({
         maxConnections: 10,
         forceUTF8: true,
@@ -61,7 +66,6 @@ var queueObj = {
         },
         callback: function (error, result, $) {
             queueObj.queueingUrlNumber--;
-            log(it2.next().value);
             try{
                 log("callback url is " + result.uri);
                 ArticleParser.extract(result.uri).then((article) => {
@@ -84,7 +88,7 @@ var queueObj = {
                 var validUrl = 0;
                 $('a').each(function (index, a) {
                     var toQueueUrl = $(a).attr('href');
-                    
+                    extraLog(toQueueUrl);
                     if (queueObj.patt.test(toQueueUrl) && toQueueUrl.indexOf(queueObj.domainKeyWord) != -1) {
 
                         if (cache.get(toQueueUrl)) {
@@ -112,44 +116,6 @@ var queueObj = {
     })
 }
 
-
-
-function idMaker(){
-    var index = 0;
-    
-    return {
-       next: function(){
-           return {value: index++, done: false};
-       }
-    };
-}
-
-var it = idMaker();
-var it2 = idMaker();
-
-var saveToParse = {
-    check:function(url){
-        var Article = Parse.Object.extend("Article");
-        var query = new Parse.Query(Article);
-        query.equalTo("url", url);
-        return query.find();
-    },
-    save:function(url){
-        var TestObject = Parse.Object.extend("Article");
-        var testObject = new TestObject();
-        return saveToParse.check(url).then(function(results){    
-            if(results.length > 0){
-                
-            }else{
-                testObject.save({url:url}).then(function(savedObj){
-                    
-                },function(error){
-                    log(error);
-                });
-            }
-        })
-    }
-}
 
 
 var saveToParseByCheckingTitle = {
@@ -182,55 +148,30 @@ setInterval(function(){
 },1000*60)
 
 function go(){
-leanextension.getAllItemsByClassName.run("Article",function(result){
-    log("cache " + result.length);
-    for(var i = 0; i<result.length;i++){
-        cache.put(result[i].get("url"), true);
-    }
-    var sample = _.sample(result,10);
-        for(var k=0;k<sample.length;k++){
-            queueObj.c.queue(sample[k].get("url"));
+    leanextension.getAllItemsByClassName.run("Article",function(result){
+        log("cache " + result.length);
+        for(var i = 0; i<result.length;i++){
+            cache.put(result[i].get("url"), true);
         }
+        getSimilarDomainObj.run();
+        queueObj.c.queue(queueObj.staringUrl);
     });
 }
-go();
-queueObj.c.queue(queueObj.domainKeyWord);
 
-var getContent = {
-    runingUrl:'http://china.huanqiu.com/article/2016-11/9738273.html?from=bdwz',
-    getNonContentObj:function(){
-        var Article = Parse.Object.extend("Article");
-        var query = new Parse.Query(Article);
-        query.doesNotExist("title");
-        return query.first();
-    },
-    checkTitle:function(title){
-        var Article = Parse.Object.extend("Article");
-        var query = new Parse.Query(Article);
-        query.equalTo("title", title);
-        return query.find();
-    },
+var getSimilarDomainObj = {
     run:function(){
-        console.log(getContent.runingUrl);
-        ArticleParser.extract(getContent.runingUrl).then(function (data) {
-            console.log(data.title);
-            getContent.checkTitle(data.title).then(function(results){
-                    getContent.getNonContentObj().then(function(nonContentResult){
-                        console.log(nonContentResult);
-                        getContent.runingUrl = nonContentResult.get("url");
-                        getContent.run();
-                    });
-                    var TestObject = Parse.Object.extend("Article");
-                    var testObject = new TestObject();
-                    testObject.save(data).then(function(){
-                        console.log("save new artile");
-                    },function(error){
-                        console.log(error);
-                    });
-            })
-        },function(error){
-            console.log(error);
-        });
+        var query = new Parse.Query("Article");
+        query.contains("url",queueObj.domainKeyWord);
+        query.find().then(function(result){
+            var sample = _.sample(result,10);
+            for(var k=0;k<sample.length;k++){
+                console.log(sample[k].get("url"));
+                queueObj.c.queue(sample[k].get("url"));
+            }
+        })
     }
 }
+go();
+
+
 
