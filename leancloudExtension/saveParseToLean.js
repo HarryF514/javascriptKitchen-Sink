@@ -5,6 +5,10 @@ var Parse = require('parse/node');
 Parse.initialize("111");
 Parse.serverURL = 'http://localhost:1337/parse';
 
+function debugLog(s){
+    //console.log(s);
+}
+
 var getAllItemsByClassName = {
     counter:0,
     resultsArray:[],
@@ -58,28 +62,42 @@ var recusiveSaveToLean = {
     checkTitle:function(title){
         var query = new AV.Query(recusiveSaveToLean.className);
         query.equalTo("title",title);
+        debugLog("title is " + title);
+        debugLog("query.equalTo");
         return query.find();
     },
     save:function(){
+        debugLog("recusiveSaveToLean")
         recusiveSaveToLean.getUnSaveParseObj().then(function(parseObj){
+            if(parseObj == undefined){
+                console.log("finished");
+                return;
+            }
+            debugLog("parse obj is  " + parseObj);
             parseObj.set("savedToLean",true);
+            debugLog("parseObj")
             parseObj.save().then(function(){
                 var newElement = parseObj.toJSON();
                 delete newElement.objectId;
+                debugLog("recusiveSaveToLean")
                 recusiveSaveToLean.checkTitle(newElement.title).then(function(count){
                 if(count.length>0){
-                    
+                    recusiveSaveToLean.save();
                 }else{
                     var TestObject = AV.Object.extend(recusiveSaveToLean.className);
                     var testObject = new TestObject();
+                    debugLog("testObject")
                     testObject.save(newElement).then(function(){
                         console.log("save title " + newElement.title);
-
+                        recusiveSaveToLean.save();
                     },function(err){console.log(err)});
                 }
-                    recusiveSaveToLean.save();
+                    debugLog("aa recusiveSaveToLean.save();")
+                    
                 },function(err){
+                    debugLog("setTimeout")
                     setTimeout(function(){
+                        debugLog("recusiveSaveToLean.save();")
                         recusiveSaveToLean.save();
                     },10000)
                     console.log(err)
