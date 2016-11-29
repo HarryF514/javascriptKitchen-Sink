@@ -90,7 +90,10 @@ var recusiveSaveToLean = {
                     testObject.save(newElement).then(function(){
                         console.log("save title " + newElement.title);
                         recusiveSaveToLean.save();
-                    },function(err){console.log(err)});
+                    },function(err){
+                        recusiveSaveToLean.save();
+                        console.log(err)
+                    });
                 }
                     debugLog("aa recusiveSaveToLean.save();")
                     
