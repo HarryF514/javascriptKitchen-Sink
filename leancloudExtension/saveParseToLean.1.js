@@ -71,6 +71,7 @@ var recusiveSaveToLean = {
         debugLog("recusiveSaveToLean")
         recusiveSaveToLean.getUnSaveParseObj().then(function(parseObj){
             if(parseObj == undefined){
+                AV.Object.saveAll(recusiveSaveToLean.AVObjectArray);
                 console.log("finished");
                 return;
             }
@@ -80,34 +81,28 @@ var recusiveSaveToLean = {
             parseObj.save().then(function(){
                 var newElement = parseObj.toJSON();
                 delete newElement.objectId;
-                debugLog("recusiveSaveToLean")
-                recusiveSaveToLean.checkTitle(newElement.title).then(function(count){
-                if(count.length>0){
-                    recusiveSaveToLean.save();
-                }else{
+                if(recusiveSaveToLean.AVObjectArray.length < 1000){
+                    recusiveSaveToLean.counter++;
+                    console.log(recusiveSaveToLean.counter);
                     var TestObject = AV.Object.extend(recusiveSaveToLean.className);
-                    var testObject = new TestObject();
-                    debugLog("testObject")
-                    testObject.save(newElement).then(function(){
-                        console.log("save title " + newElement.title);
+                    var testObject = new TestObject(newElement);
+                    recusiveSaveToLean.AVObjectArray.push(testObject);
+                    recusiveSaveToLean.save();
+                    return;
+                }else{
+                    AV.Object.saveAll(recusiveSaveToLean.AVObjectArray).then(function(){
+                        console.log("save artile " + recusiveSaveToLean.AVObjectArray.length)
+                        recusiveSaveToLean.AVObjectArray = [];
+                        recusiveSaveToLean.counter = 0;
                         recusiveSaveToLean.save();
-                    },function(err){
-                        debugLog("saved error recusiveSaveToLean.save();")
-                        recusiveSaveToLean.save();
-                        console.log(err)
-                    });
+                    },function(error){
+                        setTimeout(function() {
+                            AV.Object.saveAll(recusiveSaveToLean.AVObjectArray);
+                        }, 5000);
+                        console.log(error);
+                    })
                 }
-                    debugLog("aa recusiveSaveToLean.save();")
-                    
-                },function(err){
-                    debugLog("setTimeout")
-                    setTimeout(function(){
-                        debugLog("error recusiveSaveToLean.save();")
-                        recusiveSaveToLean.save();
-                    },10000)
-                    console.log(err)
-                })
-                
+                debugLog("recusiveSaveToLean")
             });
             
         })

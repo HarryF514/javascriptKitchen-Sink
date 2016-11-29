@@ -53,8 +53,8 @@ var queueObj = {
     urlArray: [],
     patt: /(http:\/\/)/,
     queueingUrlNumber:0,
-    domainKeyWord:"http://tech.huanqiu.com/",
-    staringUrl:"http://tech.huanqiu.com/",
+    domainKeyWord:"http://news.xkb.com.cn/",
+    staringUrl:"http://news.xkb.com.cn/",
     c: new Crawler({
         maxConnections: 10,
         forceUTF8: true,
@@ -62,7 +62,7 @@ var queueObj = {
         retryTimeout:2000,
         timeout:5000,
         onDrain: function () {
-            log("a finished,no more queue");
+            console.log("a finished,no more queue");
         },
         callback: function (error, result, $) {
             queueObj.queueingUrlNumber--;
