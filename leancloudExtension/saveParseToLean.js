@@ -91,6 +91,7 @@ var recusiveSaveToLean = {
                         console.log("save title " + newElement.title);
                         recusiveSaveToLean.save();
                     },function(err){
+                        debugLog("saved error recusiveSaveToLean.save();")
                         recusiveSaveToLean.save();
                         console.log(err)
                     });
@@ -100,7 +101,7 @@ var recusiveSaveToLean = {
                 },function(err){
                     debugLog("setTimeout")
                     setTimeout(function(){
-                        debugLog("recusiveSaveToLean.save();")
+                        debugLog("error recusiveSaveToLean.save();")
                         recusiveSaveToLean.save();
                     },10000)
                     console.log(err)
