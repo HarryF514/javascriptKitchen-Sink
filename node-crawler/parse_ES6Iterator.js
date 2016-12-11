@@ -1,193 +1,127 @@
 var Crawler = require("crawler");
 var url = require('url');
-var cache = require('memory-cache');
-
+var jsdom = require('jsdom');
 var _ = require("underscore");
-var extractor = require('unfluff');
 var ArticleParser = require('article-parser');
 
 var Parse = require('parse/node');
 Parse.initialize("111");
 Parse.serverURL = 'http://localhost:1337/parse';
+function go(domainKeyWord, staringUrl) {
+    function log(s) {
+        //console.log(s);
+    }
 
-function log(s) {
-    //console.log(s);
-}
+    function extraLog(s) {
+        //console.log(s);
+    }
 
-function extraLog(s){
-    //console.log(s);
-}
+    var queueObj = {
+        urlArray: [],
+        patt: /(http:\/\/)/,
+        queueingUrlNumber: 0,
+        domainKeyWord: domainKeyWord,
+        staringUrl: staringUrl,
+        c: new Crawler({
+            maxConnections: 10,
+            forceUTF8: true,
+            retries: 1,
+            jQuery: jsdom,
+            retryTimeout: 2000,
+            timeout: 15000,
+            onDrain: function () {
+                console.log("a finished,no more queue");
+            },
+            callback: function (error, result, $) {
+                //console.log(result);
+                queueObj.queueingUrlNumber--;
+                try {
+                        log("callback url is " + result.uri);
+                        ArticleParser.extract(result.uri).then((article) => {
+
+                        if(article.content.length > 2000){
+                            saveToParseByCheckingTitle.save(article).then(function (_article) {
+                                console.log("saved artile with url " + _article.get("url"));
+                                console.log("saved artile with title " + _article.get("title"));
+                            });
+                        }
+                    }).catch((err) => {
+                        //console.log(err);
+                });
 
 
-var getAllItemsByClassName = {
-    counter:0,
-    resultsArray:[],
-    run:function(className,callback){
-        var self = this;
-        var query = new Parse.Query(className);
-        query.limit(1000);
-        query.skip(1000*this.counter);
-        query.find().then(function(results){
-            if(results.length == 0){
-                callback(self.resultsArray);
-                return;
-            }
-            for(var i=0;i<results.length;i++){
-                self.resultsArray.push(results[i]);
-            }
-            self.counter++;
-            self.run(className,callback);
-        })
+
+
+        } catch (e)
+    {
+
+    }
+    if (error) {
+        log("callback error");
+        log(error);
+    }
+
+    try {
+        $('a').each(function (index, a) {
+            var toQueueUrl = $(a).prop('href');
+            //console.log(toQueueUrl);
+            queueObj.c.queue(toQueueUrl);
+        });
+
+    } catch (e) {
+        log(e);
     }
 }
-
-
-
-var leanextension = {
-    getAllItemsByClassName:getAllItemsByClassName
+})
 }
-
-//var c = ;
-
-var queueObj = {
-    urlArray: [],
-    patt: /(http:\/\/)/,
-    queueingUrlNumber:0,
-    domainKeyWord:"http://news.hsw.cn/",
-    staringUrl:"http://news.hsw.cn/",
-    c: new Crawler({
-        maxConnections: 10,
-        forceUTF8: true,
-        retries:1,
-        retryTimeout:2000,
-        timeout:5000,
-        onDrain: function () {
-            console.log("a finished,no more queue");
-        },
-        callback: function (error, result, $) {
-            queueObj.queueingUrlNumber--;
-            try{
-                log("callback url is " + result.uri);
-                ArticleParser.extract(result.uri).then((article) => {
-                    //console.log(article.url)
-                    //console.log(article);
-                    saveToParseByCheckingTitle.save(article);
-                }).catch((err) => {
-                    console.log(err);
-                });
-            
-            } catch(e){
-
-            }
-            if(error){
-                log("callback error");
-                log(error);
-            }
-
-            try {
-                var validUrl = 0;
-                var prepareToQueueArray = [];
-                $('a').each(function (index, a) {
-                    var toQueueUrl = $(a).attr('href');
-                    extraLog(toQueueUrl);
-                    if (queueObj.patt.test(toQueueUrl) && toQueueUrl.indexOf(queueObj.domainKeyWord) != -1) {
-                        prepareToQueueArray.push(toQueueUrl);
-                    }
-                });
-
-                var queueThePrepareUrlArray = {
-                    counter:0,
-                    run:function(theArray){
-                        var Article = Parse.Object.extend("Article");
-                        var query = new Parse.Query(Article);
-                        query.equalTo("url", theArray[queueThePrepareUrlArray.counter]);
-                        query.find().then(function(results){
-                            
-                            if(results.length>0){
-                                
-                            }else{
-                                validUrl++;
-                                log("queue the url " + theArray[queueThePrepareUrlArray.counter]);
-                                queueObj.c.queue(theArray[queueThePrepareUrlArray.counter]);
-                            }
-                            if(queueThePrepareUrlArray.counter > theArray.length){
-                                return;
-                            }
-                            queueThePrepareUrlArray.counter++;
-                            queueObj.queueingUrlNumber++;
-                            queueThePrepareUrlArray.run(theArray);
-                        })
-                    }
-                }
-                new queueThePrepareUrlArray.run(prepareToQueueArray);
-
-
-                log("valid url " + validUrl);
-                log("queueingUrlNumber url " + queueObj.queueingUrlNumber);
-                
-            } catch (e) {
-                log(e);
-            }
-        }
-    })
-}
-
 
 
 var saveToParseByCheckingTitle = {
-    check:function(title){
+    check: function (title) {
         var Article = Parse.Object.extend("Article");
         var query = new Parse.Query(Article);
         query.equalTo("title", title);
         return query.find();
     },
-    save:function(obj){
+    save: function (obj) {
         var TestObject = Parse.Object.extend("Article");
         var testObject = new TestObject();
-        return saveToParseByCheckingTitle.check(obj.title).then(function(results){    
-            if(results.length > 0){
-                
-            }else{
-                testObject.save(obj).then(function(savedObj){
-                    console.log("saved " + obj.title)
-                },function(error){
-                    log(error);
-                });
+        return saveToParseByCheckingTitle.check(obj.title).then(function (results) {
+
+            if (results.length > 0) {
+
+            } else {
+                return testObject.save(obj);
             }
         })
     }
-}
+};
 
+setInterval(function () {
+    getSimilarDomainObj.run();
+}, 1000 * 60)
 
-setInterval(function(){
-    go();
-},1000*60)
-
-function go(){
-    leanextension.getAllItemsByClassName.run("Article",function(result){
-        log("cache " + result.length);
-        for(var i = 0; i<result.length;i++){
-            cache.put(result[i].get("url"), true);
-        }
-        getSimilarDomainObj.run();
-        queueObj.c.queue(queueObj.staringUrl);
-    });
-}
 
 var getSimilarDomainObj = {
-    run:function(){
+    run: function () {
         var query = new Parse.Query("Article");
-        query.contains("url",queueObj.domainKeyWord);
-        query.find().then(function(result){
-            var sample = _.sample(result,10);
-            for(var k=0;k<sample.length;k++){
+        query.contains("url", queueObj.domainKeyWord);
+        query.find().then(function (result) {
+            var sample = _.sample(result, 10);
+            for (var k = 0; k < sample.length; k++) {
                 console.log(sample[k].get("url"));
                 queueObj.c.queue(sample[k].get("url"));
             }
         })
     }
 }
-go();
+getSimilarDomainObj.run();
+queueObj.c.queue(queueObj.staringUrl);
+
+}
+
+
+new go("http://blog.csdn.net/", "http://blog.csdn.net/");
 
 
 
