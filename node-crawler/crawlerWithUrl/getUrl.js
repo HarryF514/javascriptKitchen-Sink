@@ -37,7 +37,7 @@ var c = new Crawler({
                         UrlUtil.saveUrl(toQueueUrl);
                     }
                 });
-                removeDuplicate.checkTitle();
+
 
             } catch (e) {
                 //console.log(e);
@@ -103,8 +103,9 @@ var removeDuplicate = {
             if(result == undefined){
                 console.log("remvoe duplicated done");
                 //removeDuplicate.identifier = _.sample(["a","b","c","d","e","f","g","h","i"]);
-                //removeDuplicate.checkTitle();
-                return;
+                setTimeout(function(){
+                    removeDuplicate.checkTitle();
+                },15000);
             }
 
             var title= result.get(removeDuplicate.columna);
@@ -130,5 +131,6 @@ setInterval(function(){
     UrlUtil.countUnCheckUrl();
 },1000)
 //
+removeDuplicate.checkTitle();
 var domainKeyWord = "http://blog.csdn.net/";
 c.queue(domainKeyWord);

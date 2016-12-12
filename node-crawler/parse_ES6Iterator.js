@@ -107,7 +107,7 @@ var saveToParseByCheckingTitle = {
             if (results.length > 0) {
 
             } else {
-                return testObject.save(obj);
+                return testObjectsaveToParseByCheckingTitle(obj);
             }
         })
     }
