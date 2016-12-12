@@ -31,12 +31,13 @@
 //c.queue('http://www.wandoujia.com/');
 
 
-var Crawler = require("node-webcrawler");
+var Crawler = require("crawler");
 var url = require('url');
 var jsdom = require('jsdom');
 var c = new Crawler({
-    maxConnections : 10,
-    jQuery: jsdom,
+    maxConnections : 100,
+    //jQuery: jsdom,
+    //timeout: 5000,
     // This will be called for each crawled page
     callback : function (error, result, $) {
         // $ is Cheerio by default
@@ -48,8 +49,8 @@ var c = new Crawler({
             try {
                 //console.log($("title").text());
                 $('a').each(function (index, a) {
-                    var toQueueUrl = $(a).prop('href');
-                    //console.log(toQueueUrl);
+                    var toQueueUrl = $(a).attr('href');
+                    console.log(toQueueUrl);
                     c.queue(toQueueUrl);
                 });
 
@@ -60,6 +61,4 @@ var c = new Crawler({
     }
 });
 
-setInterval(function(){
-    c.queue('http://www.wandoujia.com/');
-},100)
+c.queue('http://www.wandoujia.com/');

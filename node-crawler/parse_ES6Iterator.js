@@ -23,7 +23,7 @@ function go(domainKeyWord, staringUrl) {
         domainKeyWord: domainKeyWord,
         staringUrl: staringUrl,
         c: new Crawler({
-            maxConnections: 10,
+            maxConnections: 5,
             forceUTF8: true,
             retries: 1,
             jQuery: jsdom,
@@ -64,8 +64,18 @@ function go(domainKeyWord, staringUrl) {
     try {
         $('a').each(function (index, a) {
             var toQueueUrl = $(a).prop('href');
-            //console.log(toQueueUrl);
-            queueObj.c.queue(toQueueUrl);
+
+            if (queueObj.patt.test(toQueueUrl) && toQueueUrl.indexOf(queueObj.domainKeyWord) != -1) {
+
+                saveToParseByCheckingTitle.checkUrl(toQueueUrl).then(function(_results){
+                    if(_results.length == 0){
+                        //console.log(toQueueUrl);
+                        queueObj.c.queue(toQueueUrl);
+                    }
+                })
+
+            }
+
         });
 
     } catch (e) {
@@ -77,6 +87,12 @@ function go(domainKeyWord, staringUrl) {
 
 
 var saveToParseByCheckingTitle = {
+    checkUrl: function (url) {
+        var Article = Parse.Object.extend("Article");
+        var query = new Parse.Query(Article);
+        query.equalTo("url", url);
+        return query.find();
+    },
     check: function (title) {
         var Article = Parse.Object.extend("Article");
         var query = new Parse.Query(Article);
@@ -98,7 +114,8 @@ var saveToParseByCheckingTitle = {
 };
 
 setInterval(function () {
-    getSimilarDomainObj.run();
+    //getSimilarDomainObj.run();
+    console.log(hellos);
 }, 1000 * 60)
 
 
