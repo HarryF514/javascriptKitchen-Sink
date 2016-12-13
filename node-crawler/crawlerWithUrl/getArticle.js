@@ -99,6 +99,10 @@ function go(domain){
     //return ArticleUrlUtil;
 }
 
+setInterval(function(){
+    console.log(restarme);
+},120*1000);
+
 var domainArray = domainList();
 console.log(domainArray);
 for(var i = 0;i<domainArray.length; i++){
