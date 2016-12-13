@@ -16,7 +16,7 @@ function go(domain){
         timeout: 5000,
         // This will be called for each crawled page
         callback : function (error, result, $) {
-
+            ArticleUrlUtil.getUrl();
             try {
                 console.log("callback url is " + result.uri);
                 ArticleParser.extract(result.uri).then((article) => {
@@ -35,7 +35,7 @@ function go(domain){
             catch (e){
         console.log(e);
                 }
-    ArticleUrlUtil.getUrl();
+
             if(error){
                 //console.log(error);
             }else{
