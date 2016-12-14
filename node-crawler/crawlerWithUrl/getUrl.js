@@ -57,7 +57,7 @@ function go(domain){
                     newDomainUrlArray = _.uniq(newDomainUrlArray);
                     _.each(newDomainUrlArray,function(element,index,list){
                         if(element.length < 21){
-                            console.log("save new domian " + element);
+                            //console.log("save new domian " + element);
                             UrlUtil.saveNewDomain(element);
                         }
 
