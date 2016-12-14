@@ -86,8 +86,9 @@ function go(domain){
             query.contains("url",ArticleUrlUtil.domainKeyWord);
             query.doesNotExist("qArticle");
             query.first().then(function(_result){
+                console.log(_result);
                 var url = _result.get("url");
-                console.log("going to queue url " + url);
+
                 _result.set("qArticle",true);
                 _result.save().then(function(__result){
                     c.queue(url);
