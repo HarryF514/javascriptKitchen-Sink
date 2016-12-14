@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "alexarank": "^0.2.0",
     "article-extractor": "^1.0.2",
     "article-parser": "^1.5.3",
     "baidumap": "^0.0.4",

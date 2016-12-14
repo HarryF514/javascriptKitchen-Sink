@@ -97,6 +97,7 @@ function go(domain){
             query.equalTo("url", url);
             query.find().then(function(_results){
                 if(_results.length == 0){
+                    console.log("start to save new domain");
                     var TestObject = Parse.Object.extend("newDomain");
                     var testObject = new TestObject();
                     return testObject.save({url:url});
