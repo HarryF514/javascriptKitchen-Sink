@@ -22,10 +22,10 @@ var removeDuplicate = {
             console.log("uncheck count " + results);
         })
     },
-    getNonCheckObj:function(){
+    getNonCheckObj:function(domain){
         var Article = Parse.Object.extend(removeDuplicate.className);
         var query = new Parse.Query(Article);
-        //query.notEqualTo("isChecked", removeDuplicate.identifier);
+        query.contains("url",domain);
         query.doesNotExist("isChecked");
         return query.first();
     },
@@ -35,13 +35,13 @@ var removeDuplicate = {
         query.equalTo(removeDuplicate.columna, title);
         return query.find();
     },
-    checkTitle:function(){
-        removeDuplicate.getNonCheckObj().then(function(result){
+    checkTitle:function(domain){
+        removeDuplicate.getNonCheckObj(domain).then(function(result){
             if(result == undefined){
                 console.log("remvoe duplicated done");
                 //removeDuplicate.identifier = _.sample(["a","b","c","d","e","f","g","h","i"]);
                 setTimeout(function(){
-                    removeDuplicate.checkTitle();
+                    removeDuplicate.checkTitle(domain);
                 },15000);
             }
 
@@ -59,7 +59,7 @@ var removeDuplicate = {
                     return _result[0].save();
                 }
             }).then(function(__result){
-                removeDuplicate.checkTitle();
+                removeDuplicate.checkTitle(domain);
             });
         })
     }
@@ -69,4 +69,9 @@ setInterval(function(){
     removeDuplicate.countUnCheckUrl();
 },2000);
 
-removeDuplicate.checkTitle();
+
+var domainArray = domainList();
+console.log(domainArray);
+for(var i = 0;i<domainArray.length; i++){
+    new removeDuplicate.checkTitle(domainArray[i]);
+}
