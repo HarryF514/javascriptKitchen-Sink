@@ -34,13 +34,33 @@ function go(domain){
 
                 try {
                     //console.log($("title").text());
+                    var toQueueUrlArray = [];
+                    var newDomainUrlArray = [];
                     $('a').each(function (index, a) {
                         var toQueueUrl = $(a).prop('href').split('#')[0];
                         if(toQueueUrl.indexOf("http") == 0 && toQueueUrl.indexOf(domainKeyWord) != -1){
                             //console.log(toQueueUrl);
-                            UrlUtil.saveUrl(toQueueUrl);
+                            toQueueUrlArray.push(toQueueUrl);
+
+                        }
+                        if(toQueueUrl.indexOf("http") == 0 && toQueueUrl.indexOf(domainKeyWord) == -1){
+                            //console.log("new domain " + UrlUtil.extractDomain(toQueueUrl));
+                            newDomainUrlArray.push(UrlUtil.extractDomain(toQueueUrl));
                         }
                     });
+
+                    toQueueUrlArray = _.uniq(toQueueUrlArray);
+                    _.each(toQueueUrlArray,function(element,index,list){
+                        UrlUtil.saveUrl(element);
+                    })
+
+                    newDomainUrlArray = _.uniq(newDomainUrlArray);
+                    _.each(newDomainUrlArray,function(element,index,list){
+                        if(element.length < 21){
+                            UrlUtil.saveNewDomain(element);
+                        }
+
+                    })
 
 
                 } catch (e) {
@@ -51,7 +71,39 @@ function go(domain){
     });
 
     var UrlUtil = {
+        extractDomain:function(url){
+            var domain;
+            //find & remove protocol (http, ftp, etc.) and get domain
+            if (url.indexOf("://") > -1) {
+                domain = url.split('/')[2];
+            }
+            else {
+                domain = url.split('/')[0];
+            }
 
+            //find & remove port number
+            domain = domain.split(':')[0];
+
+            if(domain.split('.').length == 4){
+                domain = domain.split('.')[1] + "." + domain.split('.')[2] + "." +domain.split('.')[3];
+            }
+
+            return domain;
+        },
+        saveNewDomain:function(url){
+            var Qurl = Parse.Object.extend("newDomain");
+            var query = new Parse.Query(Qurl);
+            query.equalTo("url", url);
+            query.find().then(function(_results){
+                if(_results.length == 0){
+                    var TestObject = Parse.Object.extend("newDomain");
+                    var testObject = new TestObject();
+                    return testObject.save({url:url});
+                }
+            }).catch(function(error){
+                console.log(error);
+            })
+        },
         checkUrl: function (url) {
             var Qurl = Parse.Object.extend("Qurl");
             var query = new Parse.Query(Qurl);
@@ -83,8 +135,45 @@ function go(domain){
     c.queue(domainKeyWord);
 }
 
+setInterval(function(){
+    console.log(restarme);
+},120*1000);
+
 var domainArray = domainList();
 //console.log(domainArray);
 for(var i = 0;i<domainArray.length; i++){
     new go(domainArray[i]);
 }
+
+(function(){
+    var alexa = require('alexarank');
+    var updateAlexa = {
+        go:function(){
+            var Qurl = Parse.Object.extend("newDomain");
+            var query = new Parse.Query(Qurl);
+            query.doesNotExist("rank");
+            query.first().then(function(_result){
+                console.log(_result.get("url"));
+                alexa(_result.get("url"), function(error, result) {
+                    console.log(result);
+                    var rank = {
+                        rank:parseInt(result.rank)
+                    }
+                    if (!error) {
+                        _result.save(rank).then(function(){
+                            console.log("saved new domain");
+                            updateAlexa.go();
+                        },function(error){
+                            console.log(error);
+                        });
+                    } else {
+                        console.log(error);
+                    }
+
+                });
+            });
+        }
+    }
+    updateAlexa.go();
+}());
+

@@ -24,6 +24,7 @@ function go(domain){
 
                     if(article.content.length > 2000){
                         saveToParseByCheckingTitle.save(article).then(function (_article) {
+                            console.log(new Date());
                             console.log("saved artile with url " + _article.get("url"));
                             console.log("saved artile with title " + _article.get("title"));
                         });
