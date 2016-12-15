@@ -22,11 +22,21 @@ var removeDuplicate = {
             console.log("uncheck count " + results);
         })
     },
-    getNonCheckObj:function(domain){
+    getNonCheckObj:function(options){
         var Article = Parse.Object.extend(removeDuplicate.className);
         var query = new Parse.Query(Article);
-        query.contains("url",domain);
+
         query.doesNotExist("isChecked");
+        if(options){
+            if(options.block){
+                //console.log("bloak");
+                query.equalTo("block", options.block);
+            }
+            if(options.domain){
+                //console.log("domain");
+                query.contains("url",options.domain);
+            }
+        }
         return query.first();
     },
     getObjByTitle:function(title){
@@ -35,13 +45,13 @@ var removeDuplicate = {
         query.equalTo(removeDuplicate.columna, title);
         return query.find();
     },
-    checkTitle:function(domain){
-        removeDuplicate.getNonCheckObj(domain).then(function(result){
+    checkTitle:function(options){
+        removeDuplicate.getNonCheckObj(options).then(function(result){
             if(result == undefined){
                 console.log("remvoe duplicated done");
                 //removeDuplicate.identifier = _.sample(["a","b","c","d","e","f","g","h","i"]);
                 setTimeout(function(){
-                    removeDuplicate.checkTitle(domain);
+                    removeDuplicate.checkTitle(options);
                 },15000);
             }
 
@@ -59,7 +69,7 @@ var removeDuplicate = {
                     return _result[0].save();
                 }
             }).then(function(__result){
-                removeDuplicate.checkTitle(domain);
+                removeDuplicate.checkTitle(options);
             });
         })
     }
@@ -73,5 +83,13 @@ setInterval(function(){
 var domainArray = domainList();
 console.log(domainArray);
 for(var i = 0;i<domainArray.length; i++){
-    new removeDuplicate.checkTitle(domainArray[i]);
+    new removeDuplicate.checkTitle({domain:domainArray[i]});
+//    new removeDuplicate.checkTitle({domain:domainArray[i],block:2});
+//    new removeDuplicate.checkTitle({domain:domainArray[i],block:3});
+//    new removeDuplicate.checkTitle({domain:domainArray[i],block:4});
+//    new removeDuplicate.checkTitle({domain:domainArray[i],block:5});
+//    new removeDuplicate.checkTitle({domain:domainArray[i],block:6});
+//    new removeDuplicate.checkTitle({domain:domainArray[i],block:7});
+//    new removeDuplicate.checkTitle(domainArray[i],{block:2});
+//    new removeDuplicate.checkTitle(domainArray[i],{block:3});
 }
