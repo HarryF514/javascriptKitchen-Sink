@@ -85,7 +85,8 @@ var recusiveSaveToLean = {
             debugLog("parse obj is  " + parseObj);
             parseObj.set("savedToLean",true);
             debugLog("parseObj")
-            parseObj.save().then(function(){
+            parseObj.save().then(function(_updatedParseObj){
+                console.log(_updatedParseObj.get("title"));
                 var newElement = parseObj.toJSON();
                 delete newElement.objectId;
                 if(recusiveSaveToLean.AVObjectArray.length < 10){
