@@ -28,19 +28,19 @@ if (cluster.isMaster) {
     var workerID = cluster.worker.id;
     //console.log("do sth " + JSON.stringify(workerID));
     if(workerID == 1){
-        getArticle({block:1})
-        getArticle({block:2})
-        getArticle({block:3})
+        for(var k = 0; k <= 30;k++){
+            getArticle({block:k})
+        }
     }
     if(workerID == 2){
-        getArticle({block:4})
-        getArticle({block:5})
-        getArticle({block:6})
+        for(var k = 31; k <= 60;k++){
+            getArticle({block:k})
+        }
     }
     if(workerID == 3){
-        getArticle({block:7})
-        getArticle({block:8})
-        getArticle({block:9})
+        for(var k = 61; k<= 90;k++){
+            getArticle({block:k})
+        }
     }
     if(workerID == 4){
         var thecount = 0;
@@ -50,7 +50,19 @@ if (cluster.isMaster) {
             query.exists("qArticle");
             query.count().then(function(_count){
                 //console.log("process article count is " + _count);
-                console.log(_count - thecount);
+                console.log("processed articles", _count - thecount);
+                thecount = _count;
+
+            })
+        },5000);
+
+        var articleCount = 0;
+        setInterval(function(){
+            var Article = Parse.Object.extend("Article");
+            var query = new Parse.Query(Article);
+            query.count().then(function(_count){
+                //console.log("process article count is " + _count);
+                console.log("processed articles", _count - articleCount);
                 thecount = _count;
 
             })
