@@ -97,9 +97,10 @@ var recusiveSaveToLean = {
                     recusiveSaveToLean.save();
                     return;
                 }else{
+                    recusiveSaveToLean.countLeft();
                     AV.Object.saveAll(recusiveSaveToLean.AVObjectArray).then(function(){
                         console.log("save artile " + recusiveSaveToLean.AVObjectArray.length)
-                        recusiveSaveToLean.countLeft();
+
                         recusiveSaveToLean.AVObjectArray = [];
                         recusiveSaveToLean.counter = 0;
                         recusiveSaveToLean.save();
