@@ -75,6 +75,10 @@ function go(options){
             }
             query.doesNotExist("qArticle");
             query.first().then(function(_result){
+                if(_result == undefined){
+                    console.log("finish block " + options.block);
+                    return;
+                }
                 //console.log("result queue obj " + _result);
                 var url = _result.get("url");
 
