@@ -62,7 +62,7 @@ function go(options){
         getUrl:function(){
             var Qurl = Parse.Object.extend("Qurl");
             var query = new Parse.Query(Qurl);
-            query.exists("isChecked");
+            //query.exists("isChecked");
             if(options){
                 if(options.domain){
                     //console.log("options.domain" + options.domain);
@@ -108,13 +108,13 @@ setInterval(function(){
 var domainArray = domainList();
 //console.log(domainArray);
 for(var i = 0;i<domainArray.length; i++){
-    new go({domain:domainArray[i],block:1});
+    //new go({domain:domainArray[i],block:1});
     new go({domain:domainArray[i],block:2});
-    new go({domain:domainArray[i],block:3});
-    new go({domain:domainArray[i],block:4});
-    new go({domain:domainArray[i],block:5});
-    new go({domain:domainArray[i],block:6});
-    new go({domain:domainArray[i],block:7});
-    new go({domain:domainArray[i],block:8});
-    new go({domain:domainArray[i],block:9});
+//    new go({domain:domainArray[i],block:3});
+//    new go({domain:domainArray[i],block:4});
+//    new go({domain:domainArray[i],block:5});
+//    new go({domain:domainArray[i],block:6});
+//    new go({domain:domainArray[i],block:7});
+//    new go({domain:domainArray[i],block:8});
+//    new go({domain:domainArray[i],block:9});
 }
