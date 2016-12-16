@@ -88,13 +88,17 @@ var recusiveSaveToLean = {
             parseObj.save().then(function(){
                 var newElement = parseObj.toJSON();
                 delete newElement.objectId;
-                if(recusiveSaveToLean.AVObjectArray.length < 50){
+                if(recusiveSaveToLean.AVObjectArray.length < 10){
                     recusiveSaveToLean.counter++;
                     console.log(recusiveSaveToLean.counter);
                     var TestObject = AV.Object.extend(recusiveSaveToLean.className);
                     var testObject = new TestObject(newElement);
                     recusiveSaveToLean.AVObjectArray.push(testObject);
-                    recusiveSaveToLean.save();
+                    recusiveSaveToLean.save().then(function(){
+
+                    },function(error){
+                        console.log(error);
+                    })
                     return;
                 }else{
                     recusiveSaveToLean.countLeft();
