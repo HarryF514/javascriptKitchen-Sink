@@ -76,7 +76,7 @@ function go(options){
             query.doesNotExist("qArticle");
             query.first().then(function(_result){
                 if(_result == undefined){
-                    console.log("finish block " + options);
+                    console.log("finish block " + JSON.stringify(options));
                     return;
                 }
                 //console.log("result queue obj " + _result);
