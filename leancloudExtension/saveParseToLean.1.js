@@ -94,11 +94,7 @@ var recusiveSaveToLean = {
                     var TestObject = AV.Object.extend(recusiveSaveToLean.className);
                     var testObject = new TestObject(newElement);
                     recusiveSaveToLean.AVObjectArray.push(testObject);
-                    recusiveSaveToLean.save().then(function(){
-
-                    },function(error){
-                        console.log(error);
-                    })
+                    recusiveSaveToLean.save();
                     return;
                 }else{
                     recusiveSaveToLean.countLeft();
@@ -116,6 +112,8 @@ var recusiveSaveToLean = {
                     })
                 }
                 debugLog("recusiveSaveToLean")
+            },function(error){
+                console.log(error);
             });
             
         })
