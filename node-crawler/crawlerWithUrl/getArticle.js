@@ -9,7 +9,38 @@ var Parse = require('parse/node');
 Parse.initialize("111");
 Parse.serverURL = 'http://localhost:1337/parse';
 var domainList = require("./domainList");
-function go(options){
+var go = function(options){
+
+    var c = new Crawler({
+        maxConnections : 100,
+        timeout: 15000,
+        // This will be called for each crawled page
+        callback : function (error, result, $) {
+
+
+            try{
+                var metaData = ArticleParser.parseMeta(result.body, result.uri);
+                ArticleParser.getArticle(result.body).then(function(_result){
+                    ArticleUrlUtil.getUrl();
+                    //console.log(_result);
+                    var article = _.extend(metaData, {content: _result});
+                    if(article.content.length > 2000){
+                        saveToParseByCheckingTitle.save(article).then(function (_article) {
+                            //console.log(new Date());
+                            //console.log("saved artile with url " + _article.get("url"));
+                            //console.log("saved artile with title " + _article.get("title"));
+
+                        });
+                    }
+                });
+                //console.log(metaData);
+
+
+            }catch(e){
+
+            }
+        }
+    })
 
     var extractit = {
         run:function(url){
@@ -85,8 +116,8 @@ function go(options){
                 _result.set("qArticle",true);
                 _result.save().then(function(__result){
                     //console.log("url is " + url);
-                    //c.queue(url);
-                    extractit.run(url);
+                    c.queue(url);
+                    //extractit.run(url);
                 })
 
             });
@@ -97,13 +128,7 @@ function go(options){
     ArticleUrlUtil.getUrl();
     //return ArticleUrlUtil;
 }
-setInterval(function(){
-    var Article = Parse.Object.extend("Article");
-    var query = new Parse.Query(Article);
-    query.count().then(function(_count){
-        console.log("article count is " + _count);
-    })
-},2000);
+
 
 setInterval(function(){
     console.log(restarme);
@@ -112,13 +137,30 @@ setInterval(function(){
 var domainArray = domainList();
 //console.log(domainArray);
 for(var i = 0;i<domainArray.length; i++){
-    new go({domain:domainArray[i],block:1});
-    new go({domain:domainArray[i],block:2});
-    new go({domain:domainArray[i],block:3});
-    new go({domain:domainArray[i],block:4});
-    new go({domain:domainArray[i],block:5});
-    new go({domain:domainArray[i],block:6});
-    new go({domain:domainArray[i],block:7});
-    new go({domain:domainArray[i],block:8});
-    new go({domain:domainArray[i],block:9});
+//    new go({domain:domainArray[i],block:1});
+//    new go({domain:domainArray[i],block:2});
+//    new go({domain:domainArray[i],block:3});
+//    new go({domain:domainArray[i],block:4});
+//    new go({domain:domainArray[i],block:5});
+//    new go({domain:domainArray[i],block:6});
+//    new go({domain:domainArray[i],block:7});
+//    new go({domain:domainArray[i],block:8});
+//    new go({domain:domainArray[i],block:9});
+
+
+
+
 }
+
+module.exports = go;
+//
+//new go({block:2});
+//new go({block:3});
+//new go({block:4});
+//new go({block:5});
+//new go({block:6});
+//new go({block:7});
+//new go({block:8});
+//new go({block:9});
+
+//new go();
