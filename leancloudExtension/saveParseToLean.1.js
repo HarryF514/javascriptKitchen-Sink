@@ -68,7 +68,7 @@ var recusiveSaveToLean = {
         return query.find();
     },
     countLeft:function(){
-        var query = new AV.Query(recusiveSaveToLean.className);
+        var query = new Parse.Query("Article");
         query.doesNotExist("savedToLean");
         query.count().then(function(_count){
             console.log("left " + _count);
