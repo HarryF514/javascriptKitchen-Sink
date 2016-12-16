@@ -67,6 +67,13 @@ var recusiveSaveToLean = {
         debugLog("query.equalTo");
         return query.find();
     },
+    countLeft:function(){
+        var query = new AV.Query(recusiveSaveToLean.className);
+        query.doesNotExist("savedToLean");
+        query.count().then(function(_count){
+            console.log("left " + _count);
+        })
+    },
     save:function(){
         debugLog("recusiveSaveToLean")
         recusiveSaveToLean.getUnSaveParseObj().then(function(parseObj){
@@ -92,6 +99,7 @@ var recusiveSaveToLean = {
                 }else{
                     AV.Object.saveAll(recusiveSaveToLean.AVObjectArray).then(function(){
                         console.log("save artile " + recusiveSaveToLean.AVObjectArray.length)
+                        recusiveSaveToLean.countLeft();
                         recusiveSaveToLean.AVObjectArray = [];
                         recusiveSaveToLean.counter = 0;
                         recusiveSaveToLean.save();
