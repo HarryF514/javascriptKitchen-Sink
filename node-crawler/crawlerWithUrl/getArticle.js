@@ -108,7 +108,7 @@ setInterval(function(){
 var domainArray = domainList();
 //console.log(domainArray);
 for(var i = 0;i<domainArray.length; i++){
-    //new go({domain:domainArray[i],block:1});
+    new go({domain:domainArray[i],block:1});
     new go({domain:domainArray[i],block:2});
     new go({domain:domainArray[i],block:3});
     new go({domain:domainArray[i],block:4});
