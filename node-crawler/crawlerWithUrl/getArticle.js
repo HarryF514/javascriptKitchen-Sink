@@ -110,11 +110,11 @@ var domainArray = domainList();
 for(var i = 0;i<domainArray.length; i++){
     //new go({domain:domainArray[i],block:1});
     new go({domain:domainArray[i],block:2});
-//    new go({domain:domainArray[i],block:3});
-//    new go({domain:domainArray[i],block:4});
-//    new go({domain:domainArray[i],block:5});
-//    new go({domain:domainArray[i],block:6});
-//    new go({domain:domainArray[i],block:7});
-//    new go({domain:domainArray[i],block:8});
-//    new go({domain:domainArray[i],block:9});
+    new go({domain:domainArray[i],block:3});
+    new go({domain:domainArray[i],block:4});
+    new go({domain:domainArray[i],block:5});
+    new go({domain:domainArray[i],block:6});
+    new go({domain:domainArray[i],block:7});
+    new go({domain:domainArray[i],block:8});
+    new go({domain:domainArray[i],block:9});
 }
