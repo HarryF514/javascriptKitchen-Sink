@@ -3,6 +3,7 @@ Parse.initialize("111");
 Parse.serverURL = 'http://localhost:1337/parse';
 var domainList = require("./domainList");
 var _ = require("underscore");
+var nonDomainKeyWord = require("./nonDomainKeyWord");
 
 var extractDomain = function(url){
     var domain;
@@ -43,9 +44,18 @@ var setBlock = {
             if(nonDomianUrl.match(/\d/g)){
                 digiNumber = nonDomianUrl.match(/\d/g).length;
             }
-            _result.set("block", _.random(0, 90));
-            _result.set("urlDigi", digiNumber);
-            return _result.save();
+
+            if(nonDomainKeyWord.hasNonDomainKeyWords(nonDomianUrl)){
+                return _result.destroy();
+            }else{
+                if(nonDomainKeyWord.hasGoodWords(nonDomianUrl)){
+                    _result.set("goodWords", true);
+                }
+                _result.set("block", _.random(0, 90));
+                _result.set("urlDigi", digiNumber);
+                return _result.save();
+            }
+
         }).catch(function(error){
             console.log(error);
         })

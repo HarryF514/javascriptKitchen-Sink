@@ -62,8 +62,8 @@ if (cluster.isMaster) {
             var query = new Parse.Query(Article);
             query.count().then(function(_count){
                 //console.log("process article count is " + _count);
-                console.log("processed articles", _count - articleCount);
-                thecount = _count;
+                console.log("current articles", _count - articleCount);
+                articleCount = _count;
 
             })
         },5000);
