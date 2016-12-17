@@ -7,6 +7,7 @@ var Parse = require('parse/node');
 Parse.initialize("111");
 Parse.serverURL = 'http://localhost:1337/parse';
 var domainList = require("./domainList");
+var nonDomainKeyWord = require("./nonDomainKeyWord");
 
 
 function go(domain){
@@ -40,7 +41,12 @@ function go(domain){
                         var toQueueUrl = $(a).prop('href').split('#')[0];
                         if(toQueueUrl.indexOf("http") == 0 && toQueueUrl.indexOf(domainKeyWord) != -1){
                             //console.log(toQueueUrl);
-                            toQueueUrlArray.push(toQueueUrl);
+                            if(nonDomainKeyWord.hasNonDomainKeyWords(toQueueUrl)){
+
+                            }else{
+                                toQueueUrlArray.push(toQueueUrl);
+                            }
+
 
                         }
                         if(toQueueUrl.indexOf("http") == 0 && toQueueUrl.indexOf(domainKeyWord) == -1){

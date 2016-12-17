@@ -5,32 +5,22 @@ var domainList = require("./domainList");
 var _ = require("underscore");
 var nonDomainKeyWord = require("./nonDomainKeyWord");
 
-var extractDomain = function(url){
-    var domain;
-    //find & remove protocol (http, ftp, etc.) and get domain
-    if (url.indexOf("://") > -1) {
-        domain = url.split('/')[2];
-    }
-    else {
-        domain = url.split('/')[0];
-    }
-
-    //find & remove port number
-    domain = domain.split(':')[0];
-
-    if(domain.split('.').length == 4){
-        domain = domain.split('.')[1] + "." + domain.split('.')[2] + "." +domain.split('.')[3];
-    }
-
-    return domain;
-}
-
+var counter = 0;
+var theCount = 0;
+var aQurl = Parse.Object.extend("Qurl");
+var aquery = new Parse.Query(aQurl);
+aquery.count().then(function(_count){
+    theCount = _count;
+})
 var setBlock = {
     run:function(){
+
         var Qurl = Parse.Object.extend("Qurl");
         var query = new Parse.Query(Qurl);
         //query.doesNotExist("block");
         query.each(function(_result){
+            counter++;
+            console.log(theCount - counter);
             var domain;
             var url = _result.get("url");
             if (url.indexOf("://") > -1) {
