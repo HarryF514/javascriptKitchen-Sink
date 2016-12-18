@@ -89,7 +89,7 @@ var recusiveSaveToLean = {
                 console.log(_updatedParseObj.get("title"));
                 var newElement = parseObj.toJSON();
                 delete newElement.objectId;
-                if(recusiveSaveToLean.AVObjectArray.length < 1000){
+                if(recusiveSaveToLean.AVObjectArray.length < 100){
                     recusiveSaveToLean.counter++;
                     console.log(recusiveSaveToLean.counter);
                     var TestObject = AV.Object.extend(recusiveSaveToLean.className);
