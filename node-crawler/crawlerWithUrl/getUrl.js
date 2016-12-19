@@ -147,6 +147,21 @@ setInterval(function(){
     console.log(restarme);
 },120*1000);
 
+(function(){
+    var qurlCount = 0;
+    setInterval(function(){
+        var theQurl = Parse.Object.extend("Qurl");
+        var query = new Parse.Query(theQurl);
+        query.count().then(function(_count){
+            //console.log("process article count is " + _count);
+            console.log("current articles", _count - qurlCount);
+            qurlCount = _count;
+
+        })
+    },5000);
+})();
+
+
 var domainArray = domainList();
 //console.log(domainArray);
 for(var i = 0;i<domainArray.length; i++){
