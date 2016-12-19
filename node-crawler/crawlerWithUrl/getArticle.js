@@ -93,7 +93,7 @@ var go = function(options){
         getUrl:function(){
             var Qurl = Parse.Object.extend("Qurl");
             var query = new Parse.Query(Qurl);
-            query.exists("goodWords");
+            //query.exists("goodWords");
             query.descending("urlDigi");
             if(options){
                 if(options.domain){

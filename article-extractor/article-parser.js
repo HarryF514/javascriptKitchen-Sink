@@ -1,6 +1,6 @@
 var ArticleParser = require('article-parser');
 
-var url = 'http://blog.csdn.net/shaderdx/article/details/53693978';
+var url = 'http://shop.zhe800.com/products/ze161204231608567180?jump_source=1&qd_key=qyOwt6Jn';
 
 // ArticleParser.extract(url).then((article) => {
 //   console.log(article);
