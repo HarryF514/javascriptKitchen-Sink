@@ -18,14 +18,14 @@ function go(domain){
         // This will be called for each crawled page
         callback : function (error, result, $) {
             //console.log(result.body);
-            console.log("start callback");
+            //console.log("start callback");
             console.log(new Date());
             UrlUtil.getUnQueueUrl().then(function(_result){
-                console.log("returning url is " + _result.get("url"));
+                //console.log("returning url is " + _result.get("url"));
                 _result.set("queue",true);
                 _result.save().then(function(){
                     var url = _result.get("url");
-                    console.log("going to queue  " + url);
+                    console.log("saved going to queue  " + url);
                     c.queue(url);
                 })
             });
