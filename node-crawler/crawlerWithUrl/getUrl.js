@@ -19,7 +19,7 @@ function go(domain){
         callback : function (error, result, $) {
             //console.log(result.body);
             //console.log("start callback");
-            console.log(new Date());
+            //console.log(new Date());
             UrlUtil.getUnQueueUrl().then(function(_result){
                 //console.log("returning url is " + _result.get("url"));
                 _result.set("queue",true);
