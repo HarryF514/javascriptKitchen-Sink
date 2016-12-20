@@ -1,8 +1,8 @@
 var AV = require('leanengine');
 // production
-//AV.initialize("qIHr8eVejy878hTk3jBLzpC4-gzGzoHsz", "xEHOYUKDehIJ8h2HbHs1pTCg", "KJX9Mo2jgUiwXrRbLEVP3WyR");
+AV.initialize("qIHr8eVejy878hTk3jBLzpC4-gzGzoHsz", "xEHOYUKDehIJ8h2HbHs1pTCg", "KJX9Mo2jgUiwXrRbLEVP3WyR");
 // development
-AV.initialize("Tl20696TFoBNh3HEAeENkx9J-gzGzoHsz", "UzxwYif7Nb6Q5BbO2tzkdxdQ", "0Ljt4ISnneBMLYafS5A8SCxF");
+//AV.initialize("Tl20696TFoBNh3HEAeENkx9J-gzGzoHsz", "UzxwYif7Nb6Q5BbO2tzkdxdQ", "0Ljt4ISnneBMLYafS5A8SCxF");
 
 var _ = require("underscore");
 var Parse = require('parse/node');
