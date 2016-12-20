@@ -56,7 +56,7 @@ var setBlock = {
 
 setInterval(function(){
     setBlock.run();
-},60*1000*60*5);
+},60*1000*60*7);
 
 
 setBlock.run();

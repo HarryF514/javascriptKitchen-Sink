@@ -1,5 +1,9 @@
 var AV = require('leanengine');
-AV.initialize("qIHr8eVejy878hTk3jBLzpC4-gzGzoHsz", "xEHOYUKDehIJ8h2HbHs1pTCg", "KJX9Mo2jgUiwXrRbLEVP3WyR");
+// production
+//AV.initialize("qIHr8eVejy878hTk3jBLzpC4-gzGzoHsz", "xEHOYUKDehIJ8h2HbHs1pTCg", "KJX9Mo2jgUiwXrRbLEVP3WyR");
+// development
+AV.initialize("Tl20696TFoBNh3HEAeENkx9J-gzGzoHsz", "UzxwYif7Nb6Q5BbO2tzkdxdQ", "0Ljt4ISnneBMLYafS5A8SCxF");
+
 var _ = require("underscore");
 var Parse = require('parse/node');
 Parse.initialize("111");
@@ -9,47 +13,6 @@ function debugLog(s){
     console.log(s);
 }
 
-var getAllItemsByClassName = {
-    counter:0,
-    resultsArray:[],
-    run:function(className,callback){
-        
-        var self = this;
-        var query = new Parse.Query(className);
-        query.limit(1000);
-        query.skip(1000*this.counter);
-        query.find().then(function(results){
-            if(results.length == 0){
-                callback(self.resultsArray);
-                return;
-            }
-            for(var i=0;i<results.length;i++){
-                self.resultsArray.push(results[i]);
-            }
-            self.counter++;
-            self.run(className,callback);
-        },function(error){
-            console.log(error);
-        })
-    }
-}
-
-
-
-var leanextension = {
-    getAllItemsByClassName:getAllItemsByClassName
-}
-
-leanextension.getAllItemsByClassName.run("Article",function(result){
-    var savingArray = [];
-    _.each(result,function(element,index,list){
-        var newElement = element.toJSON();
-        delete newElement.objectId;
-        savingArray.push(newElement);
-    })
-    
-    
-})
 
 var recusiveSaveToLean = {
     counter:0,
@@ -123,5 +86,3 @@ var recusiveSaveToLean = {
 }
 
 recusiveSaveToLean.save();
-
-module.exports = leanextension;

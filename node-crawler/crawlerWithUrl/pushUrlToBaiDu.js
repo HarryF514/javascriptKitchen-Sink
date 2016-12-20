@@ -6,6 +6,7 @@ var fs = require('fs');
 var makeUrl = {
     counter:0,
     fullUrl:"",
+    filename:"urls/urls",
     getObj :function(){
         var query = new AV.Query("ArticleParser");
         query.limit(1000);
@@ -20,19 +21,11 @@ var makeUrl = {
             _.each(_results,function(element,index,list){
                 makeUrl.fullUrl = makeUrl.fullUrl + "http://www.huoreport.com/huanqiuNews/" + element.id + "\n";
             })
-            if(makeUrl.counter == 0){
-                fs.writeFile("urls.txt",makeUrl.fullUrl,function(err){
-                    console.log(err);
-                    makeUrl.counter++;
-                    makeUrl.getObj();
-                });
-            }else{
-                fs.appendFile("urls.txt",makeUrl.fullUrl,function(err){
-                    console.log(err);
-                    makeUrl.counter++;
-                    makeUrl.getObj();
-                });
-            }
+            fs.writeFile(makeUrl.filename+makeUrl.counter+".txt",makeUrl.fullUrl,function(err){
+                console.log(err);
+                makeUrl.counter++;
+                makeUrl.getObj();
+            });
 
         })
     }

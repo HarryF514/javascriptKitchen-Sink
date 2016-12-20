@@ -10,6 +10,7 @@
     "baidumap": "^0.0.4",
     "bingtranslator": "^0.0.7",
     "crawler": "^0.4.3",
+    "geo-from-ip": "^1.0.6",
     "google-translate": "^1.0.6",
     "google-translate-api": "^2.2.2",
     "jsonfile": "^2.4.0",
