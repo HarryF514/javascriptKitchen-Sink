@@ -57,7 +57,9 @@ var recusiveSaveToLean = {
 
                     var TestObject = AV.Object.extend(recusiveSaveToLean.className);
                     console.log("newElement");
+                    console.log(newElement);
                     var testObject = new TestObject(newElement);
+                    console.log("newElement1");
                     recusiveSaveToLean.AVObjectArray.push(testObject);
                     console.log(recusiveSaveToLean.counter);
                     recusiveSaveToLean.save();
