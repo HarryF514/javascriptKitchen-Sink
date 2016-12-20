@@ -70,7 +70,9 @@ var recusiveSaveToLean = {
                         recusiveSaveToLean.save();
                     },function(error){
                         setTimeout(function() {
-                            AV.Object.saveAll(recusiveSaveToLean.AVObjectArray);
+                            AV.Object.saveAll(recusiveSaveToLean.AVObjectArray).then(function(){
+                                console.log("saved after error");
+                            });
                         }, 5000);
                         console.log(error);
                     })
