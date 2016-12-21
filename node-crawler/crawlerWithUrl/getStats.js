@@ -11,19 +11,21 @@ Date.prototype.addHours= function(h){
 }
 
 var showStat = {
+    classname:"Article",
+    hourBeteen:5,
     startingDate : new Date(),
     endDate:new Date(),
     latestDate:new Date(),
     getStartingDate:function(callback){
-        var Article = Parse.Object.extend("Article");
+        var Article = Parse.Object.extend(showStat.classname);
         var query = new Parse.Query(Article);
         query.ascending("createdAt");
         query.first().then(function(_result){
             showStat.startingDate = _result.get("createdAt");
             showStat.endDate = new Date(showStat.startingDate);
-            showStat.endDate.addHours(1);
+            showStat.endDate.addHours(showStat.hourBeteen);
 
-            var Article = Parse.Object.extend("Article");
+            var Article = Parse.Object.extend(showStat.classname);
             var latestDateQuery = new Parse.Query(Article);
             latestDateQuery.descending("createdAt");
             latestDateQuery.first().then(function(__result){
@@ -38,7 +40,7 @@ var showStat = {
     },
     countBetweenDate:function(startDate,endDate){
 
-        var query = new Parse.Query('Article');
+        var query = new Parse.Query(showStat.classname);
         query.greaterThanOrEqualTo('createdAt', startDate);
         console.log("start date " + startDate);
         console.log("end date " + endDate);
@@ -46,7 +48,7 @@ var showStat = {
         query.count().then(function(_count){
             console.log("count is " + _count);
             if(endDate <= showStat.latestDate){
-                showStat.countBetweenDate(startDate.addHours(1),endDate.addHours(1));
+                showStat.countBetweenDate(startDate.addHours(showStat.hourBeteen),endDate.addHours(showStat.hourBeteen));
             }
 
 
