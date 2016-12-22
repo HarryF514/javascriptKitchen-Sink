@@ -10,6 +10,7 @@ var theCount = 0;
 var aQurl = Parse.Object.extend("Qurl");
 var aquery = new Parse.Query(aQurl);
 aquery.doesNotExist("qArticle");
+aquery.doesNotExist("block");
 aquery.count().then(function(_count){
     theCount = _count;
 })
@@ -19,6 +20,7 @@ var setBlock = {
         var Qurl = Parse.Object.extend("Qurl");
         var query = new Parse.Query(Qurl);
         query.doesNotExist("qArticle");
+        query.doesNotExist("block");
         query.each(function(_result){
             counter++;
             console.log(theCount - counter);

@@ -9,23 +9,25 @@ Parse.serverURL = 'http://localhost:1337/parse';
 var domainList = require("./domainList");
 var nonDomainKeyWord = require("./nonDomainKeyWord");
 
-
+var gloCallBackCount = 0;
+var gloCallBackCount2= 0;
 function go(domain){
     var c = new Crawler({
         maxConnections : 100,
         jQuery: jsdom,
-        timeout: 5000,
+        //proxy: 'http://localhost:8887',
+        timeout: 1000,
         // This will be called for each crawled page
         callback : function (error, result, $) {
-            //console.log(result.body);
-            //console.log("start callback");
-            //console.log(new Date());
+
+            gloCallBackCount++;
+
             UrlUtil.getUnQueueUrl().then(function(_result){
                 //console.log("returning url is " + _result.get("url"));
                 _result.set("queue",true);
                 _result.save().then(function(){
                     var url = _result.get("url");
-                    console.log("saved going to queue  " + url);
+                   //console.log("saved going to queue  " + url);
                     c.queue(url);
                 })
             });
@@ -58,6 +60,7 @@ function go(domain){
                     toQueueUrlArray = _.uniq(toQueueUrlArray);
                     _.each(toQueueUrlArray,function(element,index,list){
                         UrlUtil.saveUrl(element);
+                        //c.queue(element);
                     })
 
                     newDomainUrlArray = _.uniq(newDomainUrlArray);
@@ -76,6 +79,7 @@ function go(domain){
             }
         }
     });
+
 
     var UrlUtil = {
         extractDomain:function(url){
@@ -103,7 +107,7 @@ function go(domain){
             query.equalTo("url", url);
             query.find().then(function(_results){
                 if(_results.length == 0){
-                    console.log("start to save new domain");
+                    //console.log("start to save new domain");
                     var TestObject = Parse.Object.extend("newDomain");
                     var testObject = new TestObject();
                     return testObject.save({url:url});
@@ -140,12 +144,20 @@ function go(domain){
 
 
     var domainKeyWord = domain;
-    c.queue(domainKeyWord);
+
+    UrlUtil.getUnQueueUrl().then(function(_result){
+        var url = _result.get("url");
+        //console.log("saved going to queue  " + url);
+        c.queue(url);
+    });
+
+    //c.queue(domainKeyWord);
 }
 
 setInterval(function(){
-    console.log(restarme);
-},120*1000);
+    console.log("gloCallBackCount " + (gloCallBackCount - gloCallBackCount2));
+    gloCallBackCount2 = gloCallBackCount;
+},1000);
 
 (function(){
     var qurlCount = 0;
@@ -154,19 +166,25 @@ setInterval(function(){
         var query = new Parse.Query(theQurl);
         query.count().then(function(_count){
             //console.log("process article count is " + _count);
-            console.log("current articles", _count - qurlCount);
+            //console.log("current articles", _count - qurlCount);
             qurlCount = _count;
-
         })
-    },5000);
+    },1000);
 })();
 
 
 var domainArray = domainList();
 //console.log(domainArray);
+setInterval(function(){
+    for(var i = 0;i<domainArray.length; i++){
+        new go(domainArray[i]);
+    }
+},500);
+
 for(var i = 0;i<domainArray.length; i++){
     new go(domainArray[i]);
 }
+
 
 (function(){
     var alexa = require('alexarank');
@@ -197,6 +215,6 @@ for(var i = 0;i<domainArray.length; i++){
             });
         }
     }
-    updateAlexa.go();
+    //updateAlexa.go();
 }());
 
