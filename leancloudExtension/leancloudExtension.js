@@ -1,5 +1,4 @@
 var AV = require('leanengine');
-//AV.initialize("qIHr8eVejy878hTk3jBLzpC4-gzGzoHsz", "xEHOYUKDehIJ8h2HbHs1pTCg", "KJX9Mo2jgUiwXrRbLEVP3WyR");
 
 var getAllItemsByClassName = {
     counter:0,
