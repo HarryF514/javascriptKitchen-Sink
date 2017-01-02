@@ -2,8 +2,14 @@ var Crawler = require("crawler");
 var url = require('url');
 var gloCallBackCount = 0;
 var gloCallBackCount2= 0;
+var _ = require("underscore");
+var UrlUtil = require("./UrlUtil.js");
+
+var nonDomainKeyWord = require("./nonDomainKeyWord");
+
+
 var c = new Crawler({
-    maxConnections: 100,
+    maxConnections: 20,
     // This will be called for each crawled page
     callback: function (error, res, done) {
         gloCallBackCount++;
@@ -11,23 +17,38 @@ var c = new Crawler({
             console.log(error);
         } else {
             var $ = res.$;
-            console.log($);
+            //console.log($);
             // $ is Cheerio by default
             //a lean implementation of core jQuery designed specifically for the server
             try{
                 //console.log($("title").text());
+                var toQueueUrlArray = [];
                 $('a').each(function (index, a) {
                     try {
                         var toQueueUrl = $(a).prop('href').split('#')[0];
                         if (toQueueUrl.indexOf("http") == 0) {
-                            c.queue(toQueueUrl);
+                            //c.queue(toQueueUrl);
+                            if (nonDomainKeyWord.hasNonDomainKeyWords(toQueueUrl)) {
+
+                            } else {
+
+                                toQueueUrlArray.push(toQueueUrl);
+                            }
                         }
                     } catch (e) {
-
+                        //console.log(e);
                     }
                 });
-            }catch (erro){
+                //console.log(toQueueUrlArray);
+                toQueueUrlArray = _.uniq(toQueueUrlArray);
+                _.each(toQueueUrlArray, function (element, index, list) {
+                    UrlUtil.saveUrl(element);
+                    c.queue(element);
+                    //console.log("aa");
+                })
 
+            } catch (erro) {
+                console.log(erro);
             }
 
         }
