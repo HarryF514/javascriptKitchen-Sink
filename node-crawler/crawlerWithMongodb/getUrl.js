@@ -27,7 +27,8 @@ MongoClient.connect("mongodb://localhost:27017/example2", function(err, db) {
         timeout: 15000,
         jQuery: jsdom,
         // This will be called for each crawled page
-        callback : function (error, result, $) {
+        callback : function (error, result, done) {
+            done();
             try{
                 log(result.options.uri);
 
@@ -56,6 +57,6 @@ MongoClient.connect("mongodb://localhost:27017/example2", function(err, db) {
             col.updateMany({url:docs.url}, {$set: {isQueue: true}});
         })
     },3000);
-    c.queue("http://news.yorkbbs.ca/local/2017-04/1749503.html");
+    c.queue("http://www.yiminjiayuan.com/");
     col.createIndex( { "url": 1 }, { unique: true } )
 })
