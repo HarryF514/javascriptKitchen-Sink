@@ -20,7 +20,7 @@ function log(s){
 
 
 // Connect to the db
-MongoClient.connect("mongodb://localhost:27017/example2", function(err, db) {
+MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     if(err) { return console.dir(err); }
 
     var col = db.collection('Article');

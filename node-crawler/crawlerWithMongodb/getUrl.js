@@ -19,7 +19,7 @@ function log(s){
     console.log(s);
 }
 
-MongoClient.connect("mongodb://localhost:27017/example2", function(err, db) {
+MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     if(err) { return console.dir(err); }
     var col = db.collection('Url');
     var c = new Crawler({
@@ -56,7 +56,7 @@ MongoClient.connect("mongodb://localhost:27017/example2", function(err, db) {
             c.queue(docs.url);
             col.updateMany({url:docs.url}, {$set: {isQueue: true}});
         })
-    },3000);
-    c.queue("http://www.yiminjiayuan.com/");
+    },100);
+    c.queue("http://www.51.ca/");
     col.createIndex( { "url": 1 }, { unique: true } )
 })
