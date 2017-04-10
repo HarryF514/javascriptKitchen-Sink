@@ -35,7 +35,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                 var $ = result.$;
                 $('a').each(function (index, a) {
                     var toQueueUrl = $(a).prop('href').split('#')[0];
-                    if(toQueueUrl.indexOf("http://") !== -1){
+                    if(toQueueUrl.indexOf("http://") == 0){
                         col.find({url:toQueueUrl}).toArray(function(err,docs){
                             if(docs.length === 0){
                                 col.insertOne({url:toQueueUrl});
@@ -56,7 +56,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
             c.queue(docs.url);
             col.updateMany({url:docs.url}, {$set: {isQueue: true}});
         })
-    },100);
+    },1000);
     c.queue("http://www.51.ca/");
     col.createIndex( { "url": 1 }, { unique: true } )
 })
