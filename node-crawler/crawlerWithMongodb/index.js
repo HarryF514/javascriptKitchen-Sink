@@ -14,6 +14,8 @@ var Db = require('mongodb').Db,
     Code = require('mongodb').Code,
     assert = require('assert');
 
+var exec = require('child_process').exec;
+
 function log(s){
     console.log(s);
 }
@@ -79,5 +81,16 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
         })
     },50);
 
+    setTimeout(function(){
+        exec("forever restart index.js",function(error,stdout,stderr){
+            if(error){
+                console.log(error);
+                return;
+            }
+            if(stdout){
+                console.log(stdout);
+            }
+        });
+    },10*60000);
 
 });
