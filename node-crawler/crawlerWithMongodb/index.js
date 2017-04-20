@@ -66,20 +66,32 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
         }
     })
     setInterval(function(){
-        db.collection('Url').findOne({isArticle:{$exists:false}},function(err,docs){
-            if(err){
-                log(err);
-            }
-            try{
-                c.queue(docs.url);
-                log("going to get " + docs.url);
-                db.collection('Url').updateMany({url:docs.url}, {$set: {isArticle: true}});
-            }catch(err){
-                log(err);
-            }
 
-        })
     },50);
+    var doFindAndQueue = {
+        go:function(){
+            db.collection('Url').findOne({isArticle:{$exists:false}},function(err,docs){
+                if(err){
+                    log(err);
+                }
+                try{
+
+                    log("going to get " + docs.url);
+                    db.collection('Url').updateMany({url:docs.url}, {$set: {isArticle: true}},function(err,r){
+                        if(err){
+                            log(err);
+                        }
+                        c.queue(docs.url);
+                        doFindAndQueue.go();
+                    });
+                }catch(err){
+                    log(err);
+                }
+            })
+        }
+    }
+    doFindAndQueue.go();
+
 
     setTimeout(function(){
         exec("forever restart index.js",function(error,stdout,stderr){
