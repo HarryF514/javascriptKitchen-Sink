@@ -59,8 +59,9 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
 
     setInterval(function(){
         col.findOne({isQueue:{$exists:false}},function(err,docs){
-            log("going to queue" + docs.url);
+
             if (docs && docs.url) {
+                log("going to queue" + docs.url);
                 c.queue(docs.url);
                 col.updateMany({url: docs.url}, {$set: {isQueue: true}});
             }
