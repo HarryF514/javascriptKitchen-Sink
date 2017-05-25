@@ -35,14 +35,21 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                 var $ = result.$;
                 $('a').each(function (index, a) {
                     var toQueueUrl = $(a).prop('href').split('#')[0];
-                    if(toQueueUrl.indexOf("http://") == 0){
-                        col.find({url:toQueueUrl}).toArray(function(err,docs){
-                            if(docs.length === 0){
-                                col.insertOne({url:toQueueUrl});
-                            }
-                        })
+                    var text = $(a).text().trim();
+                    if (escape(text).indexOf("%u") < 0) {
+                        //alert("没有包含中文");
+                        //console.log('no chinese', text);
                     }
-
+                    else {
+                        //alert("包含中文");
+                        if (toQueueUrl.indexOf("http://") == 0) {
+                            col.find({url: toQueueUrl}).toArray(function (err, docs) {
+                                if (docs.length === 0) {
+                                    col.insertOne({url: toQueueUrl});
+                                }
+                            })
+                        }
+                    }
                 })
             }catch (e){
 
@@ -57,6 +64,6 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
             col.updateMany({url:docs.url}, {$set: {isQueue: true}});
         })
     },1000);
-    c.queue("http://www.51.ca/");
+    c.queue("http://blog.csdn.net/");
     col.createIndex( { "url": 1 }, { unique: true } )
 })
