@@ -69,4 +69,16 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     },1000);
     c.queue("http://blog.csdn.net/");
     col.createIndex( { "url": 1 }, { unique: true } )
-})
+});
+
+setTimeout(function () {
+    exec("forever restart getUrl.js", function (error, stdout, stderr) {
+        if (error) {
+            console.log(error);
+            return;
+        }
+        if (stdout) {
+            console.log(stdout);
+        }
+    });
+}, 10 * 60000);
