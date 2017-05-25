@@ -45,7 +45,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                         if (toQueueUrl.indexOf("http://") == 0) {
                             col.find({url: toQueueUrl}).toArray(function (err, docs) {
                                 if (docs.length === 0) {
-                                    col.insertOne({url: toQueueUrl});
+                                    col.insertOne({url: toQueueUrl, title: text, titleLength: text.length});
                                 }
                             })
                         }
