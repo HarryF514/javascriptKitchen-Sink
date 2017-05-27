@@ -20,6 +20,26 @@ function log(s){
     console.log(s);
 }
 
+function getDomain(url){
+    var hostname;
+    //find & remove protocol (http, ftp, etc.) and get hostname
+
+    if (url.indexOf("://") > -1) {
+        hostname = url.split('/')[2];
+    }
+    else {
+        hostname = url.split('/')[0];
+    }
+
+    //find & remove port number
+    hostname = hostname.split(':')[0];
+    //find & remove "?"
+    hostname = hostname.split('?')[0];
+
+    return hostname;
+}
+
+
 MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     if(err) { return console.dir(err); }
     var col = db.collection('Url');
@@ -46,7 +66,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                         if (toQueueUrl.indexOf("http://") == 0) {
                             col.find({url: toQueueUrl}).toArray(function (err, docs) {
                                 if (docs.length === 0) {
-                                    col.insertOne({url: toQueueUrl, title: text, titleLength: text.length});
+                                    col.insertOne({url: toQueueUrl, title: text, titleLength: text.length, urlDomain: getDomain(toQueueUrl)});
                                 }
                             })
                         }

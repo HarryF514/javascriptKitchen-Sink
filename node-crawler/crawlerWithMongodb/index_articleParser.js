@@ -18,6 +18,26 @@ function log(s){
     console.log(s);
 }
 
+function getDomain(url){
+    var hostname;
+    //find & remove protocol (http, ftp, etc.) and get hostname
+
+    if (url.indexOf("://") > -1) {
+        hostname = url.split('/')[2];
+    }
+    else {
+        hostname = url.split('/')[0];
+    }
+
+    //find & remove port number
+    hostname = hostname.split(':')[0];
+    //find & remove "?"
+    hostname = hostname.split('?')[0];
+
+    return hostname;
+}
+
+
 
 // Connect to the db
 MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
@@ -26,12 +46,13 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     var col = db.collection('Article');
 
     var go = {
+        newUrlArray:[],
         getArticle:function(url, callback){
             try{
                 ArticleParser.extract(url).then(function(article){
                     log("article length " + article.title);
                     log("article length " + article.content.length);
-                    if(article.content.length > 10){
+                    if(article.content.length > 2000){
                         //log(article);
                         col.find({title:article.title}).toArray(function(err,docs){
                             if(docs.length === 0){
@@ -40,7 +61,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
 
                         })
                     }else{
-                        log("article length less than 10");
+                        log("article length less than 2000");
                     }
 
                     callback();
@@ -55,14 +76,20 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
             }
         },
         getNewUrl:function(callback){
-            db.collection('Url').findOne({isArticle:{$exists:false}},function(err,docs){
+            db.collection('Url').findOneAndUpdate({isArticle:{$exists:false},titleLength:{$gt:10,$lt:40}},{$set: {isArticle: true}},function(err,docs){
                 if(err){
                     log(err);
                 }
                 try{
-                    callback(docs.url);
-                    log("going to get " + docs.url);
-                    db.collection('Url').updateMany({url:docs.url}, {$set: {isArticle: true}});
+                    go.newUrlArray.push(docs.value.url);
+                    if(go.newUrlArray.length < 10){
+                        go.getNewUrl(callback);
+                    }else{
+                        callback(go.newUrlArray);
+                        go.newUrlArray = [];
+                    }
+                    
+                    log("going to get " + docs.value.url);
                 }catch(err){
                     log(err);
                 }
@@ -70,13 +97,18 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
         },
         begin:function(){
             go.getNewUrl(function(url){
-                go.getArticle(url, function(){
+                _.each(go.newUrlArray,function(element,index,list){
+                    go.getArticle(element, function(){
+                                        
+                    });
+                });
+                setTimeout(function(){
                     go.begin();
-                })
+                }, 2000);
             })
         }
     }
-    col.createIndex( { "title": 1 }, { unique: true } )
+    col.createIndex( { "title": 1 }, { unique: true } );
     go.begin();
 
 });
