@@ -3,6 +3,7 @@ var _ = require("underscore");
 var ArticleParser = require('article-parser');
 var jsdom = require('jsdom');
 var url = require('url');
+var exec = require('child_process').exec;
 
 var Db = require('mongodb').Db,
     MongoClient = require('mongodb').MongoClient,
@@ -35,7 +36,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                 var $ = result.$;
                 $('a').each(function (index, a) {
                     var toQueueUrl = $(a).prop('href').split('#')[0];
-                    var text = $(a).text().trim();
+                    var text = $(a).text().trim().replace(" ", "");
                     if (escape(text).indexOf("%u") < 0) {
                         //alert("没有包含中文");
                         //console.log('no chinese', text);
