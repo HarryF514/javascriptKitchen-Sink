@@ -64,8 +64,9 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                     else {
                         //alert("包含中文");
                         if (toQueueUrl.indexOf("http://") == 0) {
-                            col.find({url: toQueueUrl}).toArray(function (err, docs) {
+                            col.find({title: text}).toArray(function (err, docs) {
                                 if (docs.length === 0) {
+                                    console.log('title',text);
                                     col.insertOne({url: toQueueUrl, title: text, titleLength: text.length, urlDomain: getDomain(toQueueUrl)});
                                 }
                             })
@@ -89,7 +90,9 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
         })
     },1000);
     c.queue("http://blog.csdn.net/");
-    col.createIndex( { "url": 1 }, { unique: true } )
+    col.createIndex( { "url": 1 }, { unique: true } );
+    col.createIndex( { title: "hashed" } );
+
 });
 
 setTimeout(function () {
