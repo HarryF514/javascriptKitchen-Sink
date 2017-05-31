@@ -89,7 +89,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
             }
         })
     },1000);
-    c.queue("http://blog.csdn.net/");
+    c.queue("http://bbs.51.ca/forum.php");
     col.createIndex( { "url": 1 }, { unique: true } );
     col.createIndex( { title: "hashed" } );
 
