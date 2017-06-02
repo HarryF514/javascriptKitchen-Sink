@@ -38,6 +38,10 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     function getUniqueUrlDomain() {
         col.aggregate([{ $match: { qualityPercentage: { $exists: false } } }, { $group: { _id: "$urlDomain" } }], function(err, results) {
             urlDomain = results[0]._id;
+            if(urlDomain == null){
+                console.log("update url domain");
+                return;
+            }
             log(urlDomain);
             parseArticle(results[0]._id);
         });
