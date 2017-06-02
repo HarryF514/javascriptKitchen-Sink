@@ -44,10 +44,15 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     var col = db.collection('Url');
     var updateStart = {
         find:function(){
-            col.findOne({urlDomain:{$exists:false}},function(err, docs) {
-                log(docs.url);
-                col.updateOne({url:docs.url}, {$set:{urlDomain:getDomain(docs.url)}});
-                updateStart.find();
+            col.find({urlDomain:{$exists:false}}).limit(100).toArray(function(err, docs) {
+                log(docs);
+                _.each(docs,function(element,index,list){
+                    col.updateOne({url:element.url}, {$set:{urlDomain:getDomain(element.url)}});
+                });
+                //col.updateOne({url:docs.url}, {$set:{urlDomain:getDomain(docs.url)}});
+                setTimeout(function(){
+                     updateStart.find();
+                 },100);
             });
         }
     };
