@@ -1,7 +1,9 @@
 var Crawler = require("crawler");
 var _ = require("underscore");
 var ArticleParser = require('article-parser');
-
+ArticleParser.configure({
+    timeout:15*1000
+})
 
 var Db = require('mongodb').Db,
     MongoClient = require('mongodb').MongoClient,
@@ -34,7 +36,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     getUniqueUrlDomain();
 
     function getUniqueUrlDomain() {
-        col.aggregate([{ $match: { isGood: { $exists: false } } }, { $group: { _id: "$urlDomain" } }], function(err, results) {
+        col.aggregate([{ $match: { qualityPercentage: { $exists: false } } }, { $group: { _id: "$urlDomain" } }], function(err, results) {
             urlDomain = results[0]._id;
             log(urlDomain);
             parseArticle(results[0]._id);
@@ -42,23 +44,25 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     }
 
     function parseArticle(urlDomain) {
+        var sampleSize = 50;
         col.aggregate(
-            [{ $match: { urlDomain: urlDomain, isGood: { $exists: false } } }, { $sample: { size: 150 } }],
+            [{ $match: { urlDomain: urlDomain, qualityPercentage: { $exists: false } } }, { $sample: { size: sampleSize } }],
             function(err, results) {
                 console.log("totle requesting url", results.length);
-                if (results.length < 149) {
-                    col.updateMany({ urlDomain: urlDomain }, { $set: { isGood: false } }, function(err, r) {
+                if (results.length < sampleSize - 1) {
+                    col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: 0 } }, function(err, r) {
                         console.log("update resutl", r.result);
                     });
                     getUniqueUrlDomain();
                     return;
                 }
-                _.each(results, function(element, index, list) {
-                    ArticleParser.extract(element.url).then(function(article) {
-                        callbackCounter++;
+
+                function startGetArticle() {
+                    console.log("result url", results[0].url);
+                    ArticleParser.extract(results[0].url).then(function(article) {
+                        log("article length " + article.content.length);
                         if (article.content.length > 2000) {
                             //log("article length " + article.title);
-                            log("article length " + article.content.length);
                             checkQualityCoubter++;
                             //log("checkQualityCoubter",checkQualityCoubter);
                         } else {
@@ -67,40 +71,38 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                     }).catch(function(err) {
                         log("ArticleParser.extract error " + err.toString());
                         //callback();
+                    }).finally(function() {
+                        callbackCounter++;
+                        console.log("callbackCounter", callbackCounter);
+                        console.log("checkQualityCoubter", checkQualityCoubter);
+                        results.shift();
+                        if(results.length == 0){
+                            console.log("shift finished");
+                            var o = {w:1};
+                            var qualityPercentage = checkQualityCoubter/callbackCounter;
+                            if(checkQualityCoubter/callbackCounter > 0.5){
+                                // good
+                                col.updateMany({urlDomain: urlDomain}, {$set:{qualityPercentage:qualityPercentage}}, o, function(err, r) {
+                                    console.log("update",r.result);
+                                    getUniqueUrlDomain();
+                                });
+                            }else{
+                                // bad
+                                col.updateMany({urlDomain: urlDomain}, {$set:{qualityPercentage:qualityPercentage}}, o, function(err, r) {
+                                    console.log("update",r.result);
+                                    getUniqueUrlDomain();
+                                });
+
+                            }
+                            checkQualityCoubter = 0;
+                            callbackCounter = 0;
+                        }else{
+                            startGetArticle();
+                        }
                     });
-                })
+                };
+                startGetArticle();
             });
     };
-
-    // setInterval(function() {
-    //     console.log("checkQualityCounter", checkQualityCoubter);
-    //     console.log("callbackCounter", callbackCounter);
-    //     checkQualityCoubter = 0;
-    //     callbackCounter = 0;
-    //     if (checkQualityCoubter < 20) {
-    //         col.updateMany({ urlDomain: urlDomain }, { $set: { isGood: false } }, function(err, r) {
-    //             console.log("update resutl", r.result);
-    //         });
-    //     } else {
-    //         col.updateMany({ urlDomain: urlDomain }, { $set: { isGood: true } }, function(err, r) {
-    //             console.log("update resutl", r.result);
-    //         });
-    //     };
-    //     getUniqueUrlDomain();
-    // }, 20000);
-    setInterval(function(){
-        console.log("callbackCounter", callbackCounter);
-        if(callbackCounter < 149){
-                if (checkQualityCoubter < 20) {
-        col.updateMany({ urlDomain: urlDomain }, { $set: { isGood: false } }, function(err, r) {
-            console.log("update resutl", r.result);
-                });
-            } else {
-                col.updateMany({ urlDomain: urlDomain }, { $set: { isGood: true } }, function(err, r) {
-                    console.log("update resutl", r.result);
-                });
-            };
-        }
-    }, 500);
 
 });

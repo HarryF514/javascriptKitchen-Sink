@@ -9,6 +9,7 @@
     "article-parser": "^1.5.3",
     "baidumap": "^0.0.4",
     "bingtranslator": "^0.0.7",
+    "bluebird": "^3.5.0",
     "crawler": "^1.0.3",
     "geo-from-ip": "^1.0.6",
     "google-translate": "^1.0.6",
