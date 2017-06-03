@@ -24,7 +24,10 @@ function pickRandom() {
 
 }
 
-MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
+MongoClient.connect("mongodb://localhost:27017/articledb", {
+    keepAlive: 30000,
+    connectTimeoutMS: 30000,
+}, function(err, db) {
     if (err) {
         return console.dir(err);
     }
@@ -95,14 +98,17 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                             if (checkQualityCoubter / callbackCounter > 0.5) {
                                 // good
                                 col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: qualityPercentage } }, function(err, r) {
+                                    if (err) {
+                                        return console.log("finally err", err);
+                                    }
                                     console.log("update", r.result);
                                     getUniqueUrlDomain();
                                 });
                             } else {
                                 // bad
                                 col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: qualityPercentage } }, function(err, r) {
-                                    if(err){
-                                        return console.log("finally err",err);
+                                    if (err) {
+                                        return console.log("finally err", err);
                                     }
                                     console.log("update", r.result);
                                     getUniqueUrlDomain();
