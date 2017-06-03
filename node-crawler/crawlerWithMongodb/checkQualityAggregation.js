@@ -36,7 +36,11 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     getUniqueUrlDomain();
 
     function getUniqueUrlDomain() {
-        col.aggregate([{ $match: { qualityPercentage: { $exists: false } } }, { $group: { _id: "$urlDomain" } }], function(err, results) {
+        col.aggregate([{ $match: { qualityPercentage: -1 } }, { $group: { _id: "$urlDomain" } }], function(err, results) {
+            if(results.length === 0){
+                console.log("getUniqueUrlDomain finished");
+                return;
+            }
             urlDomain = results[0]._id;
             if(urlDomain == null){
                 console.log("update url domain");
@@ -50,7 +54,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     function parseArticle(urlDomain) {
         var sampleSize = 50;
         col.aggregate(
-            [{ $match: { urlDomain: urlDomain, qualityPercentage: { $exists: false } } }, { $sample: { size: sampleSize } }],
+            [{ $match: { urlDomain: urlDomain, qualityPercentage: -1 } }, { $sample: { size: sampleSize } }],
             function(err, results) {
                 console.log("totle requesting url", results.length);
                 if (results.length < sampleSize - 1) {
