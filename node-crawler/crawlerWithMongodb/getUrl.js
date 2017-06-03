@@ -48,6 +48,9 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     col.updateMany({ isArticle: { $exists: false } }, { $set: { isArticle: false } }, o, function(err, r) {
         col.updateMany({ isQueue: { $exists: false } }, { $set: { isQueue: false } }, o, function(err, r) {
             col.updateMany({ qualityPercentage: { $exists: false } }, { $set: { qualityPercentage: -1 } }, o, function(err, r) {
+                if (err) {
+                    console.log("updateMany error", err);
+                }
                 console.log("update result", r.result);
                 startGetUrl();
             });
