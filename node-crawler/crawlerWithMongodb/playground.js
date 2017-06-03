@@ -82,7 +82,12 @@ var queueGetArticle = function() {
                     if (article.content.length > 2000) {
                         //log("article length " + article.title);
                         Articlecol.find({ title: article.title }).toArray(function(err, docs) {
+                        	if(err){
+                        		return console.log("article err",err);
+                        	}
+                            console.log("docs.length", docs.length);
                             if (docs.length === 0) {
+                                console.log("Articlecol.insertOne", article.title);
                                 Articlecol.insertOne(article);
                             }
 
