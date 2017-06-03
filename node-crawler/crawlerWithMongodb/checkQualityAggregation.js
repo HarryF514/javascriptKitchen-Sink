@@ -94,13 +94,16 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                             var qualityPercentage = checkQualityCoubter / callbackCounter;
                             if (checkQualityCoubter / callbackCounter > 0.5) {
                                 // good
-                                col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: qualityPercentage } }, o, function(err, r) {
+                                col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: qualityPercentage } }, function(err, r) {
                                     console.log("update", r.result);
                                     getUniqueUrlDomain();
                                 });
                             } else {
                                 // bad
-                                col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: qualityPercentage } }, o, function(err, r) {
+                                col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: qualityPercentage } }, function(err, r) {
+                                    if(err){
+                                        return console.log("finally err",err);
+                                    }
                                     console.log("update", r.result);
                                     getUniqueUrlDomain();
                                 });
