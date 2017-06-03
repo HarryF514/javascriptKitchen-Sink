@@ -2,7 +2,7 @@ var Crawler = require("crawler");
 var _ = require("underscore");
 var ArticleParser = require('article-parser');
 ArticleParser.configure({
-    timeout:15*1000
+    timeout: 15 * 1000
 })
 
 var Db = require('mongodb').Db,
@@ -36,13 +36,17 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     getUniqueUrlDomain();
 
     function getUniqueUrlDomain() {
-        col.aggregate([{ $match: { qualityPercentage: -1 } }, { $group: { _id: "$urlDomain" } }], function(err, results) {
-            if(results.length === 0){
+        col.aggregate([{ $match: { qualityPercentage: -1 } }, { $group: { _id: "$urlDomain", count: { $sum: 1 } } }, { $sort: { count: -1 } }], function(err, results) {
+            if (err) {
+                console.log("getUniqueUrlDomain err", err);
+                return;
+            }
+            if (results.length === 0) {
                 console.log("getUniqueUrlDomain finished");
                 return;
             }
             urlDomain = results[0]._id;
-            if(urlDomain == null){
+            if (urlDomain == null) {
                 console.log("update url domain");
                 return;
             }
@@ -84,27 +88,27 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
                         console.log("callbackCounter", callbackCounter);
                         console.log("checkQualityCoubter", checkQualityCoubter);
                         results.shift();
-                        if(results.length == 0){
+                        if (results.length == 0) {
                             console.log("shift finished");
-                            var o = {w:1};
-                            var qualityPercentage = checkQualityCoubter/callbackCounter;
-                            if(checkQualityCoubter/callbackCounter > 0.5){
+                            var o = { w: 1 };
+                            var qualityPercentage = checkQualityCoubter / callbackCounter;
+                            if (checkQualityCoubter / callbackCounter > 0.5) {
                                 // good
-                                col.updateMany({urlDomain: urlDomain}, {$set:{qualityPercentage:qualityPercentage}}, o, function(err, r) {
-                                    console.log("update",r.result);
+                                col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: qualityPercentage } }, o, function(err, r) {
+                                    console.log("update", r.result);
                                     getUniqueUrlDomain();
                                 });
-                            }else{
+                            } else {
                                 // bad
-                                col.updateMany({urlDomain: urlDomain}, {$set:{qualityPercentage:qualityPercentage}}, o, function(err, r) {
-                                    console.log("update",r.result);
+                                col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: qualityPercentage } }, o, function(err, r) {
+                                    console.log("update", r.result);
                                     getUniqueUrlDomain();
                                 });
 
                             }
                             checkQualityCoubter = 0;
                             callbackCounter = 0;
-                        }else{
+                        } else {
                             startGetArticle();
                         }
                     });

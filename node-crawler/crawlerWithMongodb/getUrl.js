@@ -50,6 +50,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
             col.updateMany({ qualityPercentage: { $exists: false } }, { $set: { qualityPercentage: -1 } }, o, function(err, r) {
                 if (err) {
                     console.log("updateMany error", err);
+                    return;
                 }
                 console.log("update result", r.result);
                 startGetUrl();
