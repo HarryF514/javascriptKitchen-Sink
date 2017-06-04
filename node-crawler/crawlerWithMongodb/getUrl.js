@@ -39,8 +39,8 @@ function getDomain(url) {
 }
 
 MongoClient.connect("mongodb://localhost:27017/articledb", {
-    keepAlive: 30000,
-    connectTimeoutMS: 30000,
+    keepAlive: 300000,
+    connectTimeoutMS: 300000,
 }, function(err, db) {
     if (err) {
         return console.dir(err);
