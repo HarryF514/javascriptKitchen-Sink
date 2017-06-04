@@ -1,7 +1,9 @@
 var Crawler = require("crawler");
 var _ = require("underscore");
 var ArticleParser = require('article-parser');
-
+ArticleParser.configure({
+    timeout: 15 * 1000
+})
 
 var Db = require('mongodb').Db,
     MongoClient = require('mongodb').MongoClient,

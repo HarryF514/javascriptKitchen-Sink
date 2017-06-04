@@ -1,7 +1,9 @@
 var Crawler = require("crawler");
 var _ = require("underscore");
 var ArticleParser = require('article-parser');
-
+ArticleParser.configure({
+    timeout: 15 * 1000
+})
 
 var Db = require('mongodb').Db,
     MongoClient = require('mongodb').MongoClient,
@@ -37,7 +39,8 @@ MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
 // Connect to the db
 MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     if (err) {
-        return console.dir(err); }
+        return console.dir(err);
+    }
 
     var col = db.collection('Article');
 

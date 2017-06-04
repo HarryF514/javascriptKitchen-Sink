@@ -10,6 +10,9 @@
 var Crawler = require("crawler");
 var _ = require("underscore");
 var ArticleParser = require('article-parser');
+ArticleParser.configure({
+    timeout: 15 * 1000
+})
 var jsdom = require('jsdom');
 var url = require('url');
 var exec = require('child_process').exec;
