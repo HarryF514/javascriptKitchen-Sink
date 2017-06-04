@@ -31,7 +31,7 @@ var queueGetArticle = function() {
         var col = db.collection('Url');
         var Articlecol = db.collection('Article');
         var callbackCounter = 0;
-        col.find({ isArticle: false }).sort({ qualityPercentage: -1 }).limit(100).toArray(function(e, results) {
+        col.find({ isArticle: false }).sort({ qualityPercentage: -1 }).limit(500).toArray(function(e, results) {
             console.log("queueGetArticle find", results);
 
             function startGetArticle() {
