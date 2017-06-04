@@ -25,8 +25,8 @@ function pickRandom() {
 }
 
 MongoClient.connect("mongodb://localhost:27017/articledb", {
-    keepAlive: 300000,
-    connectTimeoutMS: 300000,
+    keepAlive: 3000000,
+    connectTimeoutMS: 3000000,
 }, function(err, db) {
     if (err) {
         return console.dir(err);
