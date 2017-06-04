@@ -50,7 +50,13 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
             col.find({ urlDomain: { $exists: false } }).limit(1000).toArray(function(err, docs) {
                 log(docs);
                 _.each(docs, function(element, index, list) {
-                    col.updateOne({ url: element.url }, { $set: { urlDomain: getDomain(element.url) } });
+                    col.updateOne({ url: element.url }, { $set: { urlDomain: getDomain(element.url) } },function(err,r){
+                        if(err){
+                            return console.log("updateOne",err);
+                        }else{
+                            console.log("update",r.result);
+                        }
+                    });
                 });
                 //col.updateOne({url:docs.url}, {$set:{urlDomain:getDomain(docs.url)}});
                 setTimeout(function() {
