@@ -52,13 +52,23 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
     var o = { w: 1 };
     o.multi = true
     col.updateMany({ isArticle: { $exists: false } }, { $set: { isArticle: false } }, function(err, r) {
+        if (err) {
+            console.log("updateMany isArticle error", err);
+            return;
+        }
+        console.log("update isArticle result", r.result);
         col.updateMany({ isQueue: { $exists: false } }, { $set: { isQueue: false } }, function(err, r) {
+            if (err) {
+                console.log("updateMany isQueue error", err);
+                return;
+            }
+            console.log("update isArticle result", r.result);
             col.updateMany({ qualityPercentage: { $exists: false } }, { $set: { qualityPercentage: -1 } }, function(err, r) {
                 if (err) {
-                    console.log("updateMany error", err);
+                    console.log("updateMany qualityPercentage error", err);
                     return;
                 }
-                console.log("update result", r.result);
+                console.log("update isArticle result", r.result);
                 startGetUrl();
             });
         });
