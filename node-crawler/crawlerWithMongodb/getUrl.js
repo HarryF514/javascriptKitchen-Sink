@@ -44,6 +44,7 @@ function getDomain(url) {
 MongoClient.connect("mongodb://localhost:27017/articledb", {
     keepAlive: 3000000,
     connectTimeoutMS: 3000000,
+    socketTimeoutMS: 3600000
 }, function(err, db) {
     if (err) {
         return console.dir(err);
