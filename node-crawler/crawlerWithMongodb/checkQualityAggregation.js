@@ -51,7 +51,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
             }
             urlDomain = results[0]._id;
             if (urlDomain == null) {
-                console.log("update url domain");
+                console.log("update url domain is null", results);
                 return;
             }
             log(urlDomain);
