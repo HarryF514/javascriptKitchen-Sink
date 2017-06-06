@@ -24,7 +24,7 @@ function log(s){
 MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
     if(err) { return console.dir(err); }
 
-    var col = db.collection('Article');
+    var col = db.collection('ArticleParser');
 
     var go = {
         newUrlArray:[],

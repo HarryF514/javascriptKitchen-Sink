@@ -73,7 +73,7 @@ var queueGetArticle = function() {
             return console.dir(err);
         }
         var col = db.collection('Url');
-        var Articlecol = db.collection('Article');
+        var Articlecol = db.collection('ArticleParser');
         var callbackCounter = 0;
         col.find({ isArticle: false }).sort({ qualityPercentage: -1 }).limit(100).toArray(function(e, results) {
             console.log("queueGetArticle find", results);
