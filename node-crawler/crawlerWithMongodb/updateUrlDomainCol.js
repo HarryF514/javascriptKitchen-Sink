@@ -38,6 +38,8 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
     var callbackCounter = 0;
     var checkQualityCoubter = 0;
     var urlDomain = "";
+    console.log(urlDomainCol);
+    return;
     db.dropCollection("UrlDomain", function(err, result) {
         if(err){
             return console.log(err);
