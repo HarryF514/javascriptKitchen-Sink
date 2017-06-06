@@ -53,6 +53,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
         col.aggregate(
             [{ $match: { urlDomain: urlDomain, qualityPercentage: -1 } }, { $sample: { size: sampleSize } }],
             function(err, results) {
+                console.log("rparseArticle esults", results);
                 console.log("totle requesting url", results.length);
                 if (results.length < sampleSize - 1) {
                     col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: 0 } }, function(err, r) {
