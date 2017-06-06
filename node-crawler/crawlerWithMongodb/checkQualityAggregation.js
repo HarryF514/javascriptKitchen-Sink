@@ -43,8 +43,8 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
     function getUniqueUrlDomain() {
         urlDomainCol.findOneAndUpdate({ isCheck: { $exists: false } }, { $set: { isCheck: true } }, function(err, result) {
             if (err) return console.log(err);
-            console.log("result._id", result.value);
-            parseArticle(result._id);
+            console.log("result._id", result.value._id);
+            parseArticle(result.value._id);
         });
     }
 
