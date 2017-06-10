@@ -121,15 +121,15 @@ function startGetUrl() {
             col.findOne({ isQueue: false }, function(err, docs) {
 
                 if (docs && docs.url) {
-                    log("going to queue" + docs.url);
+                    //log("going to queue" + docs.url);
                     c.queue(docs.url);
                     col.updateMany({ url: docs.url }, { $set: { isQueue: true } });
                 }
             })
         }, 1000);
-        c.queue("http://bbs.51.ca/forum.php");
+        c.queue("https://www.cnblogs.com/");
         col.createIndex({ "url": 1 }, { unique: true });
-        col.createIndex({ title: "hashed" });
+        col.createIndex({ "title": 1 }, { unique: true });
 
     });
 
