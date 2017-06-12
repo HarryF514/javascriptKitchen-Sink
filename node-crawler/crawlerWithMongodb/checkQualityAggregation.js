@@ -33,7 +33,6 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
         return console.dir(err);
     }
     var col = db.collection('Url');
-    var urlDomainCol = db.collection('UrlDomain');
     var callbackCounter = 0;
     var checkQualityCoubter = 0;
     var urlDomain = "";
@@ -41,10 +40,22 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
     getUniqueUrlDomain();
 
     function getUniqueUrlDomain() {
-        urlDomainCol.findOneAndUpdate({ isCheck: { $exists: false } }, { $set: { isCheck: true } }, function(err, result) {
-            if (err) return console.log(err);
-            console.log("result._id", result.value._id);
-            parseArticle(result.value._id);
+        col.aggregate([{ $match: { qualityPercentage: -1 } }, { $group: { _id: "$urlDomain", count: { $sum: 1 } } }, { $sort: { count: -1 } }], function(err, results) {
+            if (err) {
+                console.log("getUniqueUrlDomain err", err);
+                return;
+            }
+            if (results.length === 0) {
+                console.log("getUniqueUrlDomain finished");
+                return;
+            }
+            urlDomain = results[0]._id;
+            if (urlDomain == null) {
+                console.log("update url domain is null", results);
+                return;
+            }
+            log(urlDomain);
+            parseArticle(results[0]._id);
         });
     }
 
@@ -53,7 +64,6 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
         col.aggregate(
             [{ $match: { urlDomain: urlDomain, qualityPercentage: -1 } }, { $sample: { size: sampleSize } }],
             function(err, results) {
-                console.log("rparseArticle esults", results);
                 console.log("totle requesting url", results.length);
                 if (results.length < sampleSize - 1) {
                     col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: 0 } }, function(err, r) {
