@@ -51,7 +51,7 @@ var queueGetArticle = function() {
                             if (docs.length === 0) {
                                 console.log("Articlecol.insertOne", article.title);
                                 Articlecol.insertOne(article, function(err, result) {
-                                    console.log(result);
+                                    //console.log(result);
                                 });
                             }
 
