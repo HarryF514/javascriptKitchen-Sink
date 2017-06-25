@@ -195,6 +195,7 @@ var removeEnglishTitleArticle = function(counter) {
                 return;
             }
             _.each(docs, function(element, index, list) {
+                console.log('title',element.title);
                 if (escape(element.title).indexOf("%u") < 0) {
                     Articlecol.removeOne({
                         _id: element._id
@@ -212,7 +213,7 @@ var removeEnglishTitleArticle = function(counter) {
                     counter++
                     setTimeout(function () {
                         removeEnglishTitleArticle(counter);
-                    }, 1000);
+                    }, 2000);
                 }
             });
         });
