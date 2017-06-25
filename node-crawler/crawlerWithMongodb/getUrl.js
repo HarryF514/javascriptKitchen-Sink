@@ -7,6 +7,7 @@ ArticleParser.configure({
 var jsdom = require('jsdom');
 var url = require('url');
 var exec = require('child_process').exec;
+var process = require('process');
 
 var Db = require('mongodb').Db,
     MongoClient = require('mongodb').MongoClient,
@@ -40,6 +41,9 @@ function getDomain(url) {
 
     return hostname;
 }
+
+var env = process.env;
+console.log('env',env);
 
 MongoClient.connect("mongodb://localhost:27017/articledb", {
     keepAlive: 3000000,

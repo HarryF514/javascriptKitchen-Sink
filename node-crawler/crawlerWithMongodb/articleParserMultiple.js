@@ -17,6 +17,11 @@ var Db = require('mongodb').Db,
     assert = require('assert');
 
 var exec = require('child_process').exec;
+var process = require('process');
+
+if (process.pid) {
+    console.log('This process is your pid ' + process.pid);
+}
 
 function log(s) {
     console.log(s);
