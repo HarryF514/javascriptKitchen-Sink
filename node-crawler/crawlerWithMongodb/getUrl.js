@@ -100,7 +100,7 @@ function startGetUrl() {
                     $('a').each(function(index, a) {
                         var toQueueUrl = $(a).prop('href').split('#')[0];
                         var text = $(a).text().trim().replace(" ", "");
-                        if (escape(text).indexOf("%u") < 0) {
+                        if (!/.*[\u4e00-\u9fa5]+.*$/.test(element.title)) {
                             //alert("没有包含中文");
                             //console.log('no chinese', text);
                         } else {

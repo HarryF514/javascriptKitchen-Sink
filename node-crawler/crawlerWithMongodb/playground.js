@@ -200,7 +200,8 @@ var removeEnglishTitleArticle = function(counter) {
                     console.log(element.domain);
                     console.log(escape(element.title).indexOf("%u"));
                 };
-                if (escape(element.title).indexOf("%u") < 0) {
+                if (!/.*[\u4e00-\u9fa5]+.*$/.test(element.title)) {
+                    // 全是英文
                     console.log('title',element.title);
                     Articlecol.removeOne({
                         _id: element._id
