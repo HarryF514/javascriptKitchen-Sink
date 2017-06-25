@@ -195,6 +195,9 @@ var removeEnglishTitleArticle = function(counter) {
                 return;
             }
             _.each(docs, function(element, index, list) {
+                if(element.domain === 'theweathernetwork.com') {
+                    console.log(element.domain);
+                };
                 if (escape(element.title).indexOf("%u") < 0) {
                     console.log('title',element.title);
                     Articlecol.removeOne({
@@ -207,7 +210,7 @@ var removeEnglishTitleArticle = function(counter) {
                     });
                 }
                 if(index >= docs.length - 1){
-                    //db.close();
+                    db.close();
                     console.log('counter',counter);
                     counter++
                     setTimeout(function () {
