@@ -198,6 +198,7 @@ var removeEnglishTitleArticle = function(counter) {
                 if(element.domain === 'theweathernetwork.com') {
                     console.log(element.title);
                     console.log(element.domain);
+                    console.log(escape(element.title).indexOf("%u"));
                 };
                 if (escape(element.title).indexOf("%u") < 0) {
                     console.log('title',element.title);
