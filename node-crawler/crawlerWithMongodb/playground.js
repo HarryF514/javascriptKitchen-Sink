@@ -210,7 +210,9 @@ var removeEnglishTitleArticle = function(counter) {
                     db.close();
                     console.log('counter',counter);
                     counter++
-                    removeEnglishTitleArticle(counter);
+                    setTimeout(function () {
+                        removeEnglishTitleArticle(counter);
+                    }, 1000);
                 }
             });
         });
