@@ -225,6 +225,6 @@ var removeEnglishTitleArticle = function(counter) {
     });
 }
 
-removeEnglishTitleArticle(0);
+updateArtcelIdField();
 //updateIsArticleFalse();
 //initdb();
