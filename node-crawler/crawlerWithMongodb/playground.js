@@ -133,7 +133,6 @@ var updateArtcelIdField = function () {
         var Articlecol = db.collection('ArticleParser');
         Articlecol.findOneAndUpdate({id:{$exists:false}},{$set: {id:objectId}},function (err,doc) {
             console.log(doc);
-            db.close();
             updateArtcelIdField();
         })
     });
