@@ -208,7 +208,7 @@ var removeEnglishTitleArticle = function(counter) {
                 }
                 console.log(index);
                 if(index >= docs.length - 1){
-                    db.close();
+                    //db.close();
                     console.log('counter',counter);
                     counter++
                     setTimeout(function () {
