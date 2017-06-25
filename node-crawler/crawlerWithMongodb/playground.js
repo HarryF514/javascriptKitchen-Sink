@@ -91,6 +91,7 @@ var queueGetArticle = function() {
                             console.log("docs.length", docs.length);
                             if (docs.length === 0) {
                                 console.log("Articlecol.insertOne", article.title);
+                                article.id = 
                                 Articlecol.insertOne(article);
                             }
 
@@ -122,6 +123,19 @@ var queueGetArticle = function() {
     });
 }
 
-queueGetArticle();
+var updateArtcelIdField = function () {
+    var objectId = new ObjectID().toString();
+    console.log(objectId);
+     MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
+        if (err) {
+            return console.dir(err);
+        }
+        var Articlecol = db.collection('ArticleParser');
+        Articlecol.findOneAndUpdate({id:{$exists:false}},{$set: {id:objectId}},function (err,doc) {
+            console.log(doc);
+        })
+    });
+}
+updateArtcelIdField();
 //updateIsArticleFalse();
 //initdb();
