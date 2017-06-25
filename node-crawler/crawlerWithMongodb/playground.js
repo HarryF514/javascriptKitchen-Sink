@@ -189,7 +189,7 @@ var removeEnglishTitleArticle = function(counter) {
         }
         var Articlecol = db.collection('ArticleParser');
         Articlecol.find().limit(1000).skip(1000*counter).toArray(function(err, docs) {
-            console.log(docs.length);
+            //console.log(docs.length);
             if(docs.length === 0){
                 console.log('done');
                 return;
@@ -206,7 +206,6 @@ var removeEnglishTitleArticle = function(counter) {
                         db.close();
                     });
                 }
-                console.log(index);
                 if(index >= docs.length - 1){
                     //db.close();
                     console.log('counter',counter);
