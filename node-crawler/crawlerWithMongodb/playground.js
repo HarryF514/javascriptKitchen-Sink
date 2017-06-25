@@ -175,6 +175,9 @@ var updateArtcelIdField = function() {
                 id: objectId
             }
         }, function(err, doc) {
+            if(err){
+                eturn console.dir(err);
+            };
             console.log(doc);
             db.close();
             updateArtcelIdField();
