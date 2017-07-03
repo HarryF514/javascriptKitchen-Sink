@@ -203,7 +203,7 @@ var updateUrlIdField = function() {
             }
         }, function(err, doc) {
             if (err) {
-                return console.dir("err",err);
+                return console.dir("err", err);
             };
             console.log(doc);
             db.close();
@@ -256,5 +256,18 @@ var removeEnglishTitleArticle = function(counter) {
 }
 
 updateUrlIdField();
+
+setTimeout(function() {
+    exec("forever restart playground.js", function(error, stdout, stderr) {
+        if (error) {
+            console.log(error);
+            return;
+        }
+        if (stdout) {
+            console.log(stdout);
+        }
+    });
+}, 10 * 60000);
+
 //updateIsArticleFalse();
 //initdb();
