@@ -43,7 +43,8 @@ function getDomain(url) {
 }
 
 var env = process.env;
-console.log('env',env);
+var getUrlCount;
+var alphabet = [/a/, /b/, /c/, /d/, /e/, /f/, /g/, /h/, /i/, /j/, /k/, /l/, /m/, /n/, /o/, /p/, /q/, /r/, /s/, /t/, /u/, /v/, /w/, /x/, /y/, /z/];
 
 MongoClient.connect("mongodb://localhost:27017/articledb", {
     keepAlive: 3000000,
@@ -121,18 +122,38 @@ function startGetUrl() {
             }
         })
 
-        setInterval(function() {
-            col.findOne({ isQueue: false }, function(err, docs) {
-
-                if (docs && docs.url) {
-                    //log("going to queue" + docs.url);
-                    c.queue(docs.url);
-                    col.updateMany({ url: docs.url }, { $set: { isQueue: true } });
+        exec("forever list", function(error, stdout, stderr) {
+            if (!getUrlCount) {
+                getUrlCount = (stdout.match(/getUrl/g) || []).length - 1;
+                if (getUrlCount === -1) {
+                    getUrlCount = 0;
                 }
-            })
-        }, 1000);
-        c.queue("https://www.cnblogs.com/");
+                if (getUrlCount < alphabet.length - 1) {
+                    setTimeout(function() {
+                        exec("forever start getUrl.js", function(error, stdout, stderr) {});
+                    }, 1500);
+                }
+            }
+
+            var expression_one = /^http:\/\//;
+            var expression_two = alphabet[getUrlCount];
+            var expression_three = new RegExp(expression_one.source + expression_two.source);
+
+            setInterval(function() {
+                col.findOne({ isQueue: false, url: { $regex: expression_three } }, function(err, docs) {
+                    if (docs && docs.url) {
+                        //log("going to queue" + docs.url);
+                        c.queue(docs.url);
+                        col.updateMany({ url: docs.url }, { $set: { isQueue: true } });
+                    } else {
+                        c.queue("https://www.cnblogs.com/");
+                    }
+                });
+            }, 1000);
+        });
+
         col.createIndex({ "url": 1 }, { unique: true });
+
         col.createIndex({ "title": 1 }, { unique: true });
 
     });
