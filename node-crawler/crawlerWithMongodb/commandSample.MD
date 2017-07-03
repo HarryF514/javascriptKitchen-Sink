@@ -9,3 +9,6 @@ df -H
 
 #upload bson
 scp ArticleParser.bson root@huoreport.com:ArticleParser.bson
+
+#restore mongodb for a specific collection
+mongorestore -d articledb -c Url Url.bson 

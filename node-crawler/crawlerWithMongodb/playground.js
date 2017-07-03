@@ -175,12 +175,39 @@ var updateArtcelIdField = function() {
                 id: objectId
             }
         }, function(err, doc) {
-            if(err){
-                eturn console.dir(err);
+            if (err) {
+                return console.dir(err);
             };
             console.log(doc);
             db.close();
             updateArtcelIdField();
+        })
+    });
+}
+
+var updateUrlIdField = function() {
+    var objectId = new ObjectID().toString();
+    console.log(objectId);
+    MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
+        if (err) {
+            return console.dir(err);
+        }
+        var Articlecol = db.collection('Url');
+        Articlecol.findOneAndUpdate({
+            id: {
+                $exists: false
+            }
+        }, {
+            $set: {
+                id: objectId
+            }
+        }, function(err, doc) {
+            if (err) {
+                return console.dir("err",err);
+            };
+            console.log(doc);
+            db.close();
+            updateUrlIdField();
         })
     });
 }
@@ -191,21 +218,21 @@ var removeEnglishTitleArticle = function(counter) {
             return console.dir(err);
         }
         var Articlecol = db.collection('ArticleParser');
-        Articlecol.find().limit(1000).skip(1000*counter).toArray(function(err, docs) {
+        Articlecol.find().limit(1000).skip(1000 * counter).toArray(function(err, docs) {
             //console.log(docs.length);
-            if(docs.length === 0){
+            if (docs.length === 0) {
                 console.log('done');
                 return;
             }
             _.each(docs, function(element, index, list) {
-                if(element.domain === 'theweathernetwork.com') {
+                if (element.domain === 'theweathernetwork.com') {
                     console.log(element.title);
                     console.log(element.domain);
                     console.log(escape(element.title).indexOf("%u"));
                 };
                 if (!/.*[\u4e00-\u9fa5]+.*$/.test(element.title)) {
                     // 全是英文
-                    console.log('title',element.title);
+                    console.log('title', element.title);
                     Articlecol.removeOne({
                         _id: element._id
                     }, {
@@ -215,11 +242,11 @@ var removeEnglishTitleArticle = function(counter) {
                         db.close();
                     });
                 }
-                if(index >= docs.length - 1){
+                if (index >= docs.length - 1) {
                     db.close();
-                    console.log('counter',counter);
+                    console.log('counter', counter);
                     counter++
-                    setTimeout(function () {
+                    setTimeout(function() {
                         removeEnglishTitleArticle(counter);
                     }, 2000);
                 }
@@ -228,6 +255,6 @@ var removeEnglishTitleArticle = function(counter) {
     });
 }
 
-updateArtcelIdField();
+updateUrlIdField();
 //updateIsArticleFalse();
 //initdb();
