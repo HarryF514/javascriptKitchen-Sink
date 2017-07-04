@@ -110,7 +110,8 @@ function startGetUrl() {
                                 col.find({ title: text }).toArray(function(err, docs) {
                                     if (docs.length === 0) {
                                         console.log('title', text);
-                                        col.insertOne({ url: toQueueUrl, title: text, titleLength: text.length, urlDomain: getDomain(toQueueUrl), isQueue: false, isArticle: false, qualityPercentage: -1 });
+                                        var objectId = new ObjectID().toString();
+                                        col.insertOne({ id: objectId, url: toQueueUrl, title: text, titleLength: text.length, urlDomain: getDomain(toQueueUrl), isQueue: false, isArticle: false, qualityPercentage: -1 });
                                     }
                                 })
                             }
