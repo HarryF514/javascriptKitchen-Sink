@@ -255,7 +255,22 @@ var removeEnglishTitleArticle = function(counter) {
     });
 }
 
-updateUrlIdField();
+var updateCreatedDate = function() {
+
+    MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
+        if (err) {
+            return console.dir(err);
+        }
+        var Articlecol = db.collection('ArticleParser');
+        Articlecol.find({createdAt:{$exists:false}},{content:0}).limit(100).toArray(function(err, docs) {
+            console.log(docs);
+        });
+    });
+
+}
+
+//updateUrlIdField();
+updateCreatedDate();
 
 setTimeout(function() {
     exec("forever restart playground.js", function(error, stdout, stderr) {

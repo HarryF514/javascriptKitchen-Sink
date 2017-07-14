@@ -98,6 +98,7 @@ function startGetUrl() {
                     log(result.options.uri);
 
                     var $ = result.$;
+                    //console.log($('a'));
                     $('a').each(function(index, a) {
                         var toQueueUrl = $(a).prop('href').split('#')[0];
                         var text = $(a).text().trim().replace(" ", "");

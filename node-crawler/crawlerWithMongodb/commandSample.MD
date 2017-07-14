@@ -15,3 +15,9 @@ mongorestore -d articledb -c Url Url.bson
 
 #comment mongo queyr
 db.Url.count({id:{$exists:false}})
+
+#dump one collection
+mongodump --db=<old_db_name> --collection=<collection_name>
+
+#remove a field from a collection
+db.ArticleParser.update({},{$unset: {createdAt:1}},{multi: true});
