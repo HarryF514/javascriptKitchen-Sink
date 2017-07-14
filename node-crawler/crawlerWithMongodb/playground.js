@@ -262,8 +262,23 @@ var updateCreatedDate = function() {
             return console.dir(err);
         }
         var Articlecol = db.collection('ArticleParser');
-        Articlecol.find({createdAt:{$exists:false}},{content:0}).limit(100).toArray(function(err, docs) {
-            console.log(docs);
+        Articlecol.find({ createdAt: { $exists: false } }, { content: 0 }).limit(100).toArray(function(err, docs) {
+
+            var updateThoseArticle = function() {
+                Articlecol.findOneAndUpdate({ _id: docs[0]._id }, { $set: { createdAt: new Date() } }, function(err, r) {
+                    if (err) { console.log(err); }
+                    console.log('updated', docs[0]._id);
+                    docs.shift();
+                    if(docs.length > 0){
+                        updateThoseArticle();
+                    }else{
+                        db.close();
+                        updateCreatedDate();
+                    }
+                });
+            };
+            updateThoseArticle();
+
         });
     });
 
