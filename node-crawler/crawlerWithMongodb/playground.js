@@ -256,14 +256,13 @@ var removeEnglishTitleArticle = function(counter) {
 }
 
 var updateCreatedDate = function() {
-
+    var latestDate;
     MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
         if (err) {
             return console.dir(err);
         }
         var Articlecol = db.collection('ArticleParser');
         Articlecol.find({ createdAt: { $exists: false } }, { content: 0 }).limit(100).toArray(function(err, docs) {
-
             var updateThoseArticle = function() {
                 Articlecol.findOneAndUpdate({ _id: docs[0]._id }, { $set: { createdAt: new Date() } }, function(err, r) {
                     if (err) { console.log(err); }
