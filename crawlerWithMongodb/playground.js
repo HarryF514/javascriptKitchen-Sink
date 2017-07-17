@@ -314,10 +314,10 @@ var updateCreatedDate = function(latestDate) {
                 updateThoseArticle();
             });
         }
-
     });
-
 }
+
+
 
 //updateUrlIdField();
 updateCreatedDate(new Date());

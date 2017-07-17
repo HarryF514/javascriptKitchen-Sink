@@ -21,3 +21,6 @@ mongodump --db=<old_db_name> --collection=<collection_name>
 
 #remove a field from a collection
 db.ArticleParser.update({},{$unset: {createdAt:1}},{multi: true});
+
+#create unique index
+db.ArticleParser.createIndex({title:1},{ unique: true })
