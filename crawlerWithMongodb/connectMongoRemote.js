@@ -13,6 +13,10 @@ MongoClient.connect('mongodb://139.59.252.180:27017/articledb', function(err, db
 	Articlecol.count().then(function(docs) {
 	    console.log('Articlecol.count() count', docs);
 	});
+
+	Articlecol.count({createdAt:{$exists:false}}).then(function(docs) {
+	    console.log('Articlecol.count({createdAt:{$exists:false}}) count', docs);
+	});
 	
 	UrlCol.count().then(function(docs) {
 	    console.log('UrlCol.count() count', docs);

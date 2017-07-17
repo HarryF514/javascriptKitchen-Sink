@@ -333,8 +333,8 @@ var updateCreatedDate = function(latestDate) {
 
 
 
-updateUrlIdField();
-//updateCreatedDate(new Date());
+//updateUrlIdField();
+updateCreatedDate(new Date());
 
 setTimeout(function() {
     exec("forever restart playground.js", function(error, stdout, stderr) {
