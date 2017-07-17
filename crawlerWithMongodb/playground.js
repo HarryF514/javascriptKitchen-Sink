@@ -255,36 +255,72 @@ var removeEnglishTitleArticle = function(counter) {
     });
 }
 
-var updateCreatedDate = function() {
-    var latestDate;
+var updateCreatedDate = function(latestDate) {
+    if(!latestDate){
+        var latestDate;
+    }
     MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
         if (err) {
             return console.dir(err);
         }
         var Articlecol = db.collection('ArticleParser');
-        Articlecol.find({ createdAt: { $exists: false } }, { content: 0 }).limit(100).toArray(function(err, docs) {
-            var updateThoseArticle = function() {
-                Articlecol.findOneAndUpdate({ _id: docs[0]._id }, { $set: { createdAt: new Date() } }, function(err, r) {
-                    if (err) { console.log(err); }
-                    console.log('updated', docs[0]._id);
-                    docs.shift();
-                    if(docs.length > 0){
-                        updateThoseArticle();
-                    }else{
-                        db.close();
-                        updateCreatedDate();
-                    }
-                });
-            };
-            updateThoseArticle();
 
+        Articlecol.findOne({}, {
+            sort: {
+                createdAt: -1
+            }
+        }).then(function(r) {
+            latestDate = r.createdAt;
+            if(!latestDate){
+                latestDate = new Date();
+            }
+            console.log('latestDate',latestDate);
+            startUpdate();
         });
+        return;
+
+        function startUpdate() {
+            Articlecol.find({
+                createdAt: {
+                    $exists: false
+                }
+            }, {
+                content: 0
+            }).limit(100).toArray(function(err, docs) {
+                var updateThoseArticle = function() {
+                    console.log('latestDate', latestDate);
+                    Articlecol.findOneAndUpdate({
+                        _id: docs[0]._id
+                    }, {
+                        $set: {
+                            createdAt: latestDate
+                        }
+                    }, function(err, r) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        //console.log('updated', docs[0]._id);
+                        docs.shift();
+                        if (docs.length > 0) {
+                            updateThoseArticle();
+                        } else {
+                            var numberOfDaysToAdd = 1;
+                            latestDate.setDate(latestDate.getDate() + numberOfDaysToAdd);
+                            //db.close();
+                            startUpdate();
+                        }
+                    });
+                };
+                updateThoseArticle();
+            });
+        }
+
     });
 
 }
 
 //updateUrlIdField();
-updateCreatedDate();
+updateCreatedDate(new Date());
 
 setTimeout(function() {
     exec("forever restart playground.js", function(error, stdout, stderr) {
