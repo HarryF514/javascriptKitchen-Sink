@@ -199,7 +199,7 @@ var updateUrlIdField = function() {
                 }
             }, {
                 content: 0
-            }).limit(100).toArray(function(err, docs) {
+            }).limit(1000).toArray(function(err, docs) {
                 var updateThoseArticle = function() {
                     Articlecol.findOneAndUpdate({
                         _id: docs[0]._id
