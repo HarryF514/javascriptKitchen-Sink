@@ -186,29 +186,43 @@ var updateArtcelIdField = function() {
 }
 
 var updateUrlIdField = function() {
-    var objectId = new ObjectID().toString();
-    console.log(objectId);
     MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
         if (err) {
             return console.dir(err);
         }
-        var Articlecol = db.collection('Url');
-        Articlecol.findOneAndUpdate({
-            id: {
-                $exists: false
-            }
-        }, {
-            $set: {
-                id: objectId
-            }
-        }, function(err, doc) {
-            if (err) {
-                return console.dir("err", err);
-            };
-            console.log(doc);
-            db.close();
-            updateUrlIdField();
-        })
+        var Articlecol = db.collection('ArticleParser');
+        startUpdate();
+        function startUpdate() {
+            Articlecol.find({
+                id: {
+                    $exists: false
+                }
+            }, {
+                content: 0
+            }).limit(100).toArray(function(err, docs) {
+                var updateThoseArticle = function() {
+                    Articlecol.findOneAndUpdate({
+                        _id: docs[0]._id
+                    }, {
+                        $set: {
+                            id: new ObjectID().toString()
+                        }
+                    }, function(err, r) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        console.log('updated', r);
+                        docs.shift();
+                        if (docs.length > 0) {
+                            updateThoseArticle();
+                        } else {
+                            startUpdate();
+                        }
+                    });
+                };
+                updateThoseArticle();
+            });
+        }
     });
 }
 
@@ -319,8 +333,8 @@ var updateCreatedDate = function(latestDate) {
 
 
 
-//updateUrlIdField();
-updateCreatedDate(new Date());
+updateUrlIdField();
+//updateCreatedDate(new Date());
 
 setTimeout(function() {
     exec("forever restart playground.js", function(error, stdout, stderr) {
