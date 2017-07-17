@@ -190,7 +190,7 @@ var updateUrlIdField = function() {
         if (err) {
             return console.dir(err);
         }
-        var Articlecol = db.collection('ArticleParser');
+        var Articlecol = db.collection('Url');
         startUpdate();
         function startUpdate() {
             Articlecol.find({
