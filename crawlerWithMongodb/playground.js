@@ -332,7 +332,7 @@ var updateCreatedDate = function(latestDate) {
 }
 
 
-
+//updateArtcelIdField();
 //updateUrlIdField();
 updateCreatedDate(new Date());
 
