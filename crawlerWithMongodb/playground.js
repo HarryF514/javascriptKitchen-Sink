@@ -343,6 +343,7 @@ var updateCreatedDate_v2 = function(latestDate) {
         var cursor = Articlecol.find();
 
         var twentyMinutesLater = new Date();
+        
 
         startCursor();
 
