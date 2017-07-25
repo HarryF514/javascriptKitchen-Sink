@@ -192,6 +192,7 @@ var updateUrlIdField = function() {
         }
         var Articlecol = db.collection('Url');
         startUpdate();
+
         function startUpdate() {
             Articlecol.find({
                 id: {
@@ -270,7 +271,7 @@ var removeEnglishTitleArticle = function(counter) {
 }
 
 var updateCreatedDate = function(latestDate) {
-    if(!latestDate){
+    if (!latestDate) {
         var latestDate;
     }
     MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
@@ -285,10 +286,10 @@ var updateCreatedDate = function(latestDate) {
             }
         }).then(function(r) {
             latestDate = r.createdAt;
-            if(!latestDate){
+            if (!latestDate) {
                 latestDate = new Date();
             }
-            console.log('latestDate',latestDate);
+            console.log('latestDate', latestDate);
             startUpdate();
         });
         return;
@@ -331,10 +332,50 @@ var updateCreatedDate = function(latestDate) {
     });
 }
 
+var updateCreatedDate_v2 = function(latestDate) {
+    MongoClient.connect("mongodb://localhost:27017/articledb", function(err, db) {
+        if (err) {
+            return console.dir(err);
+        }
+        var Articlecol = db.collection('ArticleParser');
+
+
+        var cursor = Articlecol.find();
+
+        var twentyMinutesLater = new Date();
+
+        startCursor();
+
+        function startCursor() {
+            cursor.next(function(err, r) {
+                if (r.createdAt) {
+                    console.log('createdAt', r.createdAt);
+                    startCursor();
+                    return;
+                }
+                Articlecol.findOneAndUpdate({
+                    _id: r._id
+                }, {
+                    $set: {
+                        createdAt: twentyMinutesLater
+                    }
+                }, function(err, r) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    twentyMinutesLater.setMinutes(twentyMinutesLater.getMinutes() + 10);
+                    console.log('updated twentyMinutesLater', twentyMinutesLater);
+                    startCursor();
+                });
+            });
+        }
+
+    });
+}
 
 //updateArtcelIdField();
 //updateUrlIdField();
-updateCreatedDate(new Date());
+updateCreatedDate_v2();
 
 setTimeout(function() {
     exec("forever restart playground.js", function(error, stdout, stderr) {
