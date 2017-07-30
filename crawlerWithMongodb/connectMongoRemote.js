@@ -3,7 +3,7 @@ var MongoClient = require('mongodb').MongoClient
 var remote_db = null
 MongoClient.connect('mongodb://139.59.252.180:27017/articledb', function(err, db) {
 	if (err) {
-		console.log(err);
+		console.log('MongoClient.connect error' , err);
 		return
 	}
 	remote_db = db;
