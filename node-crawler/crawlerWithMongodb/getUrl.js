@@ -7,6 +7,7 @@ ArticleParser.configure({
 var jsdom = require('jsdom');
 var url = require('url');
 var exec = require('child_process').exec;
+var process = require('process');
 
 var Db = require('mongodb').Db,
     MongoClient = require('mongodb').MongoClient,
@@ -40,6 +41,9 @@ function getDomain(url) {
 
     return hostname;
 }
+
+var env = process.env;
+console.log('env',env);
 
 MongoClient.connect("mongodb://localhost:27017/articledb", {
     keepAlive: 3000000,
@@ -88,17 +92,15 @@ function startGetUrl() {
             jQuery: jsdom,
             // This will be called for each crawled page
             callback: function(error, result, done) {
-                if(error){
-                    console.log('error',error);
-                }
                 done();
                 try {
+                    log(result.options.uri);
+
                     var $ = result.$;
                     $('a').each(function(index, a) {
                         var toQueueUrl = $(a).prop('href').split('#')[0];
-                        console.log('toQueueUrl',toQueueUrl);
                         var text = $(a).text().trim().replace(" ", "");
-                        if (!/.*[\u4e00-\u9fa5]+.*$/.test(text)) {
+                        if (!/.*[\u4e00-\u9fa5]+.*$/.test(element.title)) {
                             //alert("没有包含中文");
                             //console.log('no chinese', text);
                         } else {
@@ -114,7 +116,7 @@ function startGetUrl() {
                         }
                     })
                 } catch (e) {
-                    console.log('error',e);
+
                 }
             }
         })
@@ -129,9 +131,9 @@ function startGetUrl() {
                 }
             })
         }, 1000);
-        c.queue("http://www.51.ca/");
+        c.queue("https://www.cnblogs.com/");
         col.createIndex({ "url": 1 }, { unique: true });
-        //col.createIndex({ "title": 1 }, { unique: true });
+        col.createIndex({ "title": 1 }, { unique: true });
 
     });
 
@@ -147,4 +149,3 @@ function startGetUrl() {
         });
     }, 10 * 60000);
 }
-
