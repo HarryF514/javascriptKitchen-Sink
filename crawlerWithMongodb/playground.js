@@ -408,6 +408,8 @@ var synLocalArticleToRemove = function() {
                     remoteArticlecol.insertOne(r, function(err, r) {
                         if(err){
                             console.log('err remote', err);
+                        }else{
+                            console.log('insert', originlId);
                         }
                         localArticlecol.findOneAndUpdate({
                             _id: originlId
