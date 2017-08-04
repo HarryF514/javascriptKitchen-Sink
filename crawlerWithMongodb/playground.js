@@ -343,7 +343,7 @@ var updateCreatedDate_v2 = function(latestDate) {
         var cursor = Articlecol.find();
 
         var twentyMinutesLater = new Date();
-        
+
 
         startCursor();
 
@@ -374,9 +374,65 @@ var updateCreatedDate_v2 = function(latestDate) {
     });
 }
 
+var synLocalArticleToRemove = function() {
+
+    MongoClient.connect('mongodb://139.59.252.180:27017/articledb', function(err, remotedb) {
+        if (err) {
+            console.log('MongoClient.connect error', err);
+            return
+        };
+
+        var remoteArticlecol = remotedb.collection('ArticleParser');
+
+
+        MongoClient.connect("mongodb://localhost:27017/articledb", function(err, localdb) {
+            if (err) {
+                return console.dir(err);
+            }
+            var localArticlecol = localdb.collection('ArticleParser');
+            var cursor = localArticlecol.find({
+                isPushed: {
+                    $exists: false
+                }
+            });
+
+            (function startCursor() {
+                cursor.next(function(err, r) {
+                    if(err){
+                        return console.log(err);
+                    }
+                    var originlId = r._id;
+                    delete r._id;
+                    console.log('originlId', originlId);
+
+                    remoteArticlecol.insertOne(r, function(err, r) {
+                        if(err){
+                            console.log('err remote', err);
+                        }
+                        localArticlecol.findOneAndUpdate({
+                            _id: originlId
+                        }, {
+                            $set: {
+                                isPushed: true
+                            }
+                        }, function(err, r) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            startCursor();
+                        });
+                    });
+
+                });
+            })();
+        });
+    });
+}
+
+synLocalArticleToRemove();
 //updateArtcelIdField();
 //updateUrlIdField();
-updateCreatedDate_v2();
+//updateCreatedDate_v2();
 
 setTimeout(function() {
     exec("forever restart playground.js", function(error, stdout, stderr) {
