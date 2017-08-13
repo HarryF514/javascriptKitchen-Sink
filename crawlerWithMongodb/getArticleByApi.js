@@ -10,22 +10,27 @@ ArticleParser.configure({
         if (error) {
             return console.log('error', error);
         };
-        ArticleParser.extract(JSON.parse(body).url).then(function(article) {
-            //console.log('article.content.length', article.content.length);
-            if (article.content.length > 2000) {
-                request.post({
-                    url: 'http://9i9icenter.com/db/addArticle',
-                    form: article
-                }, function(error, response, body) {
-                	go();
-                    if (error) {
-                        return console.log('error', error);
-                    }
-                    //console.log('body', body);
-                });
-            }else{
-            	go();
-            }
-        });
+        if (body && JSON.parse(body) && JSON.parse(body).url) {
+            ArticleParser.extract(JSON.parse(body).url).then(function(article) {
+                console.log('article.content.length', article.content.length);
+                if (article.content.length > 2000) {
+                    request.post({
+                        url: 'http://9i9icenter.com/db/addArticle',
+                        form: article
+                    }, function(error, response, body) {
+                        go();
+                        if (error) {
+                            return console.log('error', error);
+                        }
+                        //console.log('body', body);
+                    });
+                } else {
+                    go();
+                }
+            });
+        } else {
+            go();
+        }
+
     })
 })();
