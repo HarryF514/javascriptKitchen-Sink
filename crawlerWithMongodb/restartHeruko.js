@@ -51,4 +51,14 @@ setInterval(function() {
 		}
 	});
 
+	exec('curl -n -X DELETE https://api.heroku.com/apps/getarticle4/dynos   -H "Content-Type: application/json"   -H "Accept: application/vnd.heroku+json; version=3"', function(error, stdout, stderr) {
+		if (error) {
+			console.log(error);
+			return;
+		}
+		if (stdout) {
+			console.log(stdout);
+		}
+	});
+
 }, 10*60000);
