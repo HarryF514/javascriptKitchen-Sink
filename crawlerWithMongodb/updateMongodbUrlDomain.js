@@ -51,6 +51,9 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
     var updateStart = {
         find: function() {
             col.find({ urlDomain: { $exists: false } }).limit(1000).toArray(function(err, docs) {
+                if(err){
+                    console.log('err',err);
+                }
                 log(docs);
                 _.each(docs, function(element, index, list) {
                     col.updateOne({ url: element.url }, { $set: { urlDomain: getDomain(element.url) } },function(err,r){
