@@ -27,3 +27,6 @@ db.ArticleParser.count({createdAt:{$exists:true}});
 
 #create unique index
 db.ArticleParser.createIndex({title:1},{ unique: true })
+
+#update many
+db.Url.updateMany({qualityPercentage:{$lt:0.1}},{$set:{"isArticle": true}})
