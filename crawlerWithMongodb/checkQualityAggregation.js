@@ -100,7 +100,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
                                 // good
                                 col.updateMany({ urlDomain: urlDomain }, { $set: { qualityPercentage: qualityPercentage } }, function(err, r) {
                                     if (err) {
-                                        return console.log("finally err", err);
+                                        console.log("finally err", err);
                                     }
                                     console.log("update", r.result);
                                     getUniqueUrlDomain();
