@@ -43,6 +43,7 @@ MongoClient.connect("mongodb://localhost:27017/articledb", {
         col.aggregate([{ $match: { qualityPercentage: -1 } }, { $group: { _id: "$urlDomain", count: { $sum: 1 } } }, { $sort: { count: -1 } }], function(err, results) {
             if (err) {
                 console.log("getUniqueUrlDomain err", err);
+                getUniqueUrlDomain();
                 return;
             }
             if (results.length === 0) {
