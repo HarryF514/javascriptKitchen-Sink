@@ -20,6 +20,7 @@
     "leanengine": "^0.4.2",
     "memory-cache": "^0.1.6",
     "mongodb": "^2.2.25",
+    "nedb": "^1.8.0",
     "node-cache": "^4.1.0",
     "parse": "^1.9.2",
     "ping": "^0.2.1",
