@@ -134,8 +134,12 @@ function startGetUrl() {
                                     isQueue: false,
                                     isArticle: false,
                                     qualityPercentage: -1
-                                }, function() {
-                                    console.log('inserted ', text)
+                                }, function(err, r) {
+                                    if(err){
+                                        console.log('err ', err);
+                                    }else{
+                                        console.log('inserted ', text)
+                                    }
                                 });
                             }
                         }
