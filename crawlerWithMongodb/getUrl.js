@@ -164,7 +164,7 @@ function startGetUrl() {
                 }
             })
         }, 1000);
-        c.queue("http://www.51.ca/");
+        c.queue("http://www.gamersky.com/handbook/pc/gl/");
         col.createIndex({
             "url": 1
         }, {
