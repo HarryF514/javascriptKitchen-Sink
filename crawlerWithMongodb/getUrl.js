@@ -117,7 +117,6 @@ function startGetUrl() {
                     var $ = result.$;
                     $('a').each(function(index, a) {
                         var toQueueUrl = $(a).prop('href').split('#')[0];
-                        console.log('toQueueUrl', toQueueUrl);
                         var text = $(a).text().trim().replace(" ", "");
                         if (!/.*[\u4e00-\u9fa5]+.*$/.test(text)) {
                             //alert("没有包含中文");
@@ -125,24 +124,19 @@ function startGetUrl() {
                         } else {
                             //alert("包含中文");
                             if (toQueueUrl.indexOf("http://") == 0) {
-                                col.find({
-                                    title: text
-                                }).toArray(function(err, docs) {
-                                    if (docs.length === 0) {
-                                        console.log('title', text);
-                                        var objectId = new ObjectID().toString();
-                                        col.insertOne({
-                                            url: toQueueUrl,
-                                            id: objectId,
-                                            title: text,
-                                            titleLength: text.length,
-                                            urlDomain: getDomain(toQueueUrl),
-                                            isQueue: false,
-                                            isArticle: false,
-                                            qualityPercentage: -1
-                                        });
-                                    }
-                                })
+                                var objectId = new ObjectID().toString();
+                                col.insertOne({
+                                    url: toQueueUrl,
+                                    id: objectId,
+                                    title: text,
+                                    titleLength: text.length,
+                                    urlDomain: getDomain(toQueueUrl),
+                                    isQueue: false,
+                                    isArticle: false,
+                                    qualityPercentage: -1
+                                }, function() {
+                                    console.log('inserted ', text)
+                                });
                             }
                         }
                     })
