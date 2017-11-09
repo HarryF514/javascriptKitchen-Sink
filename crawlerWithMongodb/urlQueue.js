@@ -2,7 +2,7 @@
  * @Author: Harry Feng
  * @Date:   2017-11-09 12:59:43
  * @Last Modified by:   Harry Feng
- * @Last Modified time: 2017-11-09 16:14:27
+ * @Last Modified time: 2017-11-09 16:45:13
  */
 const Db = require('mongodb').Db,
 	MongoClient = require('mongodb').MongoClient,
@@ -54,8 +54,14 @@ function getUrl(callback) {
 	})
 }
 
-function updateUrl() {
-	
+function updateUrl(url) {
+	col.updateMany({
+		url: url
+	}, {
+		$set: {
+			isQueue: true
+		}
+	});
 }
 
 setInterval(function() {
@@ -67,7 +73,9 @@ setInterval(function() {
 }, 10000);
 
 app.get('/', (req, res) => {
-	res.json(urlArray.shift())
+	var resultUrl = urlArray.shift();
+	updateUrl(resultUrl);
+	res.json(resultUrl)
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
