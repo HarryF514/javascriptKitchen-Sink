@@ -2,7 +2,7 @@
  * @Author: Harry Feng
  * @Date:   2017-11-09 12:59:43
  * @Last Modified by:   Harry Feng
- * @Last Modified time: 2017-11-09 16:45:13
+ * @Last Modified time: 2017-11-09 17:29:53
  */
 const Db = require('mongodb').Db,
 	MongoClient = require('mongodb').MongoClient,
@@ -73,6 +73,12 @@ setInterval(function() {
 }, 10000);
 
 app.get('/', (req, res) => {
+	var resultUrl = urlArray.shift();
+	updateUrl(resultUrl);
+	res.json(resultUrl)
+})
+
+app.get('/save', (req, res) => {
 	var resultUrl = urlArray.shift();
 	updateUrl(resultUrl);
 	res.json(resultUrl)

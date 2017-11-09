@@ -116,7 +116,7 @@ function startGetUrl() {
                 try {
                     var $ = result.$;
                     $('a').each(function(index, a) {
-                        var toQueueUrl = $(a).prop('href').split('#')[0];
+                        var toQueueUrl = $(this).prop('href').split('#')[0];
                         var text = $(a).text().trim().replace(" ", "");
                         if (!/.*[\u4e00-\u9fa5]+.*$/.test(text)) {
                             //alert("没有包含中文");
