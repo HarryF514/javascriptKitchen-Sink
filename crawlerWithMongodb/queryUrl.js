@@ -2,7 +2,7 @@
  * @Author: Harry Feng
  * @Date:   2017-11-09 16:54:14
  * @Last Modified by:   Harry Feng
- * @Last Modified time: 2017-11-09 17:39:47
+ * @Last Modified time: 2017-11-10 14:39:20
  */
 
 var request = require('request'),
@@ -34,7 +34,14 @@ function parse(url) {
         	parse('http://localhost:3000/');
         	return;
         }
-        var obj = JSON.parse(body);
+        try{
+            var obj = JSON.parse(body);
+        }catch(e){
+            console.log('body error: ', e);
+            parse('http://localhost:3000/');
+            return
+        }
+        
         console.log('obj.url', obj.url);
         request(obj.url, function(error, response, body) {
         	try {

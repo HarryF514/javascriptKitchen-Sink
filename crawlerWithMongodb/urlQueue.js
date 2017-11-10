@@ -2,7 +2,7 @@
  * @Author: Harry Feng
  * @Date:   2017-11-09 12:59:43
  * @Last Modified by:   Harry Feng
- * @Last Modified time: 2017-11-09 17:29:53
+ * @Last Modified time: 2017-11-10 13:26:17
  */
 const Db = require('mongodb').Db,
 	MongoClient = require('mongodb').MongoClient,
@@ -54,7 +54,7 @@ connect(function(database) {
 function getUrl(callback) {
 	col.find({
 		isQueue: false
-	}).limit(1000).toArray(function(err, docs) {
+	}).limit(3000).toArray(function(err, docs) {
 		if (err) {
 			return console.log(err);
 		} else {
@@ -79,7 +79,7 @@ function updateUrl(url) {
 }
 
 setInterval(function() {
-	if (urlArray <= 500) {
+	if (urlArray <= 1000) {
 		getUrl(function(urls) {
 			urlArray = urlArray.concat(urls);
 		});
