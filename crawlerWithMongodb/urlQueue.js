@@ -14,11 +14,19 @@ const Db = require('mongodb').Db,
 	Grid = require('mongodb').Grid,
 	Code = require('mongodb').Code,
 	assert = require('assert');
-const express = require('express')
+const express = require('express');
+const queryString = require('query-string');
+var bodyParser = require('body-parser');
+
+
+
 const app = express()
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: false }));
 var db;
 var col;
 var urlArray = [];
+var url = require('url');
 
 function connect(callback) {
 	MongoClient.connect("mongodb://localhost:27017/articledb", {
@@ -61,6 +69,11 @@ function updateUrl(url) {
 		$set: {
 			isQueue: true
 		}
+	}, function(err,r){
+		if(err){
+			return console.log('updateUrl err', err);
+		}else{
+		}
 	});
 }
 
@@ -74,14 +87,23 @@ setInterval(function() {
 
 app.get('/', (req, res) => {
 	var resultUrl = urlArray.shift();
-	updateUrl(resultUrl);
+	updateUrl(resultUrl.url);
 	res.json(resultUrl)
 })
 
-app.get('/save', (req, res) => {
-	var resultUrl = urlArray.shift();
-	updateUrl(resultUrl);
-	res.json(resultUrl)
+app.post('/save', (req, res) => {
+	var urlObj = req.body;
+	if(urlObj) {
+		var dataArray = JSON.parse(urlObj.data)
+	}
+	col.insertMany(dataArray, function(err, r){
+		if(err){
+			res.send(err);
+		}else{
+			console.log('inserted', new Date())
+			res.send(true);
+		}
+	});
 })
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
