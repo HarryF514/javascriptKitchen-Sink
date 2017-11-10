@@ -2,7 +2,7 @@
  * @Author: Harry Feng
  * @Date:   2017-11-09 12:59:43
  * @Last Modified by:   Harry Feng
- * @Last Modified time: 2017-11-10 13:26:17
+ * @Last Modified time: 2017-11-10 16:24:02
  */
 const Db = require('mongodb').Db,
 	MongoClient = require('mongodb').MongoClient,
@@ -17,7 +17,7 @@ const Db = require('mongodb').Db,
 const express = require('express');
 const queryString = require('query-string');
 var bodyParser = require('body-parser');
-
+var _ = require('underscore');
 
 
 const app = express()
@@ -97,6 +97,11 @@ app.post('/save', (req, res) => {
 	if(urlObj) {
 		var dataArray = JSON.parse(urlObj.data)
 	}
+	_.each(dataArray, function(element, index, list){
+		var objectId = new ObjectID().toString();
+		element.id = objectId;
+	});
+	console.log('dataArray', dataArray[0])
 	col.insertMany(dataArray, function(err, r){
 		if(err){
 			res.send(err);
