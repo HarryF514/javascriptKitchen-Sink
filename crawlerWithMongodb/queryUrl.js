@@ -2,7 +2,7 @@
  * @Author: Harry Feng
  * @Date:   2017-11-09 16:54:14
  * @Last Modified by:   Harry Feng
- * @Last Modified time: 2017-11-10 14:39:20
+ * @Last Modified time: 2017-11-10 17:36:28
  */
 
 var request = require('request'),
@@ -99,10 +99,10 @@ function parse(url) {
 }
 
 parse('http://localhost:3000/');
-parse('http://localhost:3000/');
-parse('http://localhost:3000/');
-parse('http://localhost:3000/');
-parse('http://localhost:3000/');
-parse('http://localhost:3000/');
-parse('http://localhost:3000/');
-parse('http://localhost:3000/');
+// parse('http://localhost:3000/');
+// parse('http://localhost:3000/');
+// parse('http://localhost:3000/');
+// parse('http://localhost:3000/');
+// parse('http://localhost:3000/');
+// parse('http://localhost:3000/');
+// parse('http://localhost:3000/');

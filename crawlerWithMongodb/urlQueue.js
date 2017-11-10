@@ -2,7 +2,7 @@
  * @Author: Harry Feng
  * @Date:   2017-11-09 12:59:43
  * @Last Modified by:   Harry Feng
- * @Last Modified time: 2017-11-10 16:24:02
+ * @Last Modified time: 2017-11-10 16:25:13
  */
 const Db = require('mongodb').Db,
 	MongoClient = require('mongodb').MongoClient,
@@ -101,7 +101,7 @@ app.post('/save', (req, res) => {
 		var objectId = new ObjectID().toString();
 		element.id = objectId;
 	});
-	console.log('dataArray', dataArray[0])
+	//console.log('dataArray', dataArray[0])
 	col.insertMany(dataArray, function(err, r){
 		if(err){
 			res.send(err);
