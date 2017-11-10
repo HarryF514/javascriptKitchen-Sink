@@ -46,6 +46,7 @@ connect(function(database) {
 	db = database;
 	col = db.collection('Url');
 	getUrl(function(urls) {
+		console.log('init url succeed')
 		urlArray = urlArray.concat(urls);
 	});
 });

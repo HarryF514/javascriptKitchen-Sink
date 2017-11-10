@@ -30,14 +30,24 @@ function getDomain(url) {
 
 function parse(url) {
     request(url, function(error, response, body) {
-
         if(body === undefined){
         	parse('http://localhost:3000/');
         	return;
         }
         var obj = JSON.parse(body);
+        console.log('obj.url', obj.url);
         request(obj.url, function(error, response, body) {
-            var $ = cheerio.load(body);
+        	try {
+        		// statements
+        		 var $ = cheerio.load(body);
+        	} catch(e) {
+        		// statements
+        		console.log(e);
+        		parse('http://localhost:3000/');
+        		return;
+
+        	}
+           
             var requestBody = [];
             $('a').each(function(index, a) {
 
