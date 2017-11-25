@@ -33,14 +33,14 @@ function getDomain(url) {
 function parse(url) {
     request(url, function(error, response, body) {
         if (body === undefined) {
-            parse('http://localhost:3000/');
+            parse('http://myui.net.cn:3000/');
             return;
         }
         try {
             var obj = JSON.parse(body);
         } catch (e) {
             console.log('body error: ', e);
-            parse('http://localhost:3000/');
+            parse('http://myui.net.cn:3000/');
             return
         }
 
@@ -52,7 +52,7 @@ function parse(url) {
             } catch (e) {
                 // statements
                 console.log(e);
-                parse('http://localhost:3000/');
+                parse('http://myui.net.cn:3000/');
                 return;
 
             }
@@ -86,12 +86,12 @@ function parse(url) {
             });
 
             request.post({
-                url: 'http://localhost:3000/save',
+                url: 'http://myui.net.cn:3000/save',
                 form: {
                     data: JSON.stringify(requestBody)
                 }
             }, function(error, response, body) {
-                parse('http://localhost:3000/');
+                parse('http://myui.net.cn:3000/');
                 if (error) {
                     return console.log('error', error)
                 } else {
@@ -102,7 +102,7 @@ function parse(url) {
     })
 }
 
-parse('http://localhost:3000/');
+parse('http://myui.net.cn:3000/');
 
 setTimeout(function() {
     exec("forever restart queryUrl.js", function(error, stdout, stderr) {

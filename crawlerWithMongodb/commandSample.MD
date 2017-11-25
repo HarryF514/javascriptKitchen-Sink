@@ -30,6 +30,7 @@ db.ArticleParser.createIndex({title:1},{ unique: true })
 
 #update many
 db.Url.updateMany({qualityPercentage:{$lt:0.1}},{$set:{"isArticle": true}})
+db.Url.updateMany({urlDomain:"e.dangdang.com"},{$set:{"isQueue": true}})
 
 #commond query
 db.Url.count({qualityPercentage:-1})
