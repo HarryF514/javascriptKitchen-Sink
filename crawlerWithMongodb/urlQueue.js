@@ -109,7 +109,7 @@ app.post('/save', (req, res) => {
     res.send(true);
     urlInsertingArray = urlInsertingArray.concat(dataArray);
     console.log('urlInsertingArray length ', urlInsertingArray.length);
-    if (urlInsertingArray && urlInsertingArray.length > 5000) {
+    if (urlInsertingArray && urlInsertingArray.length > 1000) {
         col.insertMany(dataArray, function(err, r) {
         	urlInsertingArray = [];
         	console.log('udpate url');
