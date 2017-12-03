@@ -116,6 +116,7 @@ app.post('/save', (req, res) => {
     console.log('urlInsertingArray length ', urlInsertingArray.length);
     if (urlInsertingArray && urlInsertingArray.length > 1000) {
         col.insertMany(dataArray, function(err, r) {
+            console.log('r.insertedCount', r.insertedCount);
         	urlInsertingArray = [];
         	console.log('udpate url', new Date());
             if (err) {
