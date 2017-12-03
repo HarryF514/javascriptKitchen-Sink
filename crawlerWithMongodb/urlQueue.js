@@ -93,13 +93,13 @@ setInterval(function() {
 
 app.get('/', (req, res) => {
     var resultUrl = urlArray.shift();
-    if(resultUrl && resultUrl.url){
+    if (resultUrl && resultUrl.url) {
         updateUrl(resultUrl.url);
         res.json(resultUrl)
-    }else{
+    } else {
         res.json(true);
     }
-    
+
 })
 
 app.post('/save', (req, res) => {
@@ -115,12 +115,14 @@ app.post('/save', (req, res) => {
     urlInsertingArray = urlInsertingArray.concat(dataArray);
     console.log('urlInsertingArray length ', urlInsertingArray.length);
     if (urlInsertingArray && urlInsertingArray.length > 1000) {
-        col.insertMany(dataArray, function(err, r) {
+        col.insertMany(dataArray, {
+            ordered: false
+        }, function(err, r) {
             console.log('r.insertedCount', r.insertedCount);
-        	urlInsertingArray = [];
-        	console.log('udpate url', new Date());
+            urlInsertingArray = [];
+            console.log('udpate url', new Date());
             if (err) {
-                console.log('udpate err', err , new Date());
+                console.log('udpate err', err, new Date());
             } else {
                 console.log('inserted', new Date());
             }
