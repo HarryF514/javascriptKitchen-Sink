@@ -31,7 +31,9 @@ function getDomain(url) {
 }
 
 function parse(url) {
-    request(url, function(error, response, body) {
+    request(url, {
+        timeout: 5000
+    }, function(error, response, body) {
         if (body === undefined) {
             parse('http://myui.net.cn:3000/');
             return;
