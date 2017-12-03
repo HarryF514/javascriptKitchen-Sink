@@ -93,8 +93,13 @@ setInterval(function() {
 
 app.get('/', (req, res) => {
     var resultUrl = urlArray.shift();
-    updateUrl(resultUrl.url);
-    res.json(resultUrl)
+    if(resultUrl && resultUrl.url){
+        updateUrl(resultUrl.url);
+        res.json(resultUrl)
+    }else{
+        res.json(true);
+    }
+    
 })
 
 app.post('/save', (req, res) => {
