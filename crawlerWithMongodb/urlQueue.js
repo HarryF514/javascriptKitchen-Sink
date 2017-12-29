@@ -31,6 +31,7 @@ app.use(bodyParser.urlencoded({
 var db;
 var col;
 var urlArray = [];
+var articleUrlArray = [];
 var url = require('url');
 var urlInsertingArray = [];
 
@@ -55,9 +56,20 @@ connect(function(database) {
         console.log('init url succeed')
         urlArray = urlArray.concat(urls);
     });
+
+    getUrl(function(urls) {
+        console.log(urls.length);
+        articleUrlArray = articleUrlArray.concat(urls);
+        console.log('init article url succeed')
+    }, {
+        isArticle: false
+    });
 });
 
-function getUrl(callback) {
+function getUrl(callback, query) {
+    var _query = query || {
+        isQueue: false
+    }
     col.find({
         isQueue: false
     }).limit(3000).toArray(function(err, docs) {
@@ -69,13 +81,14 @@ function getUrl(callback) {
     })
 }
 
-function updateUrl(url) {
+function updateUrl(url, set) {
+    var _set = set || {
+        isQueue: true
+    }
     col.updateMany({
         url: url
     }, {
-        $set: {
-            isQueue: true
-        }
+        $set: _set
     }, function(err, r) {
         if (err) {
             return console.log('updateUrl err', err);
@@ -89,6 +102,13 @@ setInterval(function() {
             urlArray = urlArray.concat(urls);
         });
     }
+    if (articleUrlArray <= 1000) {
+        getUrl(function(urls) {
+            articleUrlArray = articleUrlArray.concat(urls);
+        }, {
+            isArticle: false
+        });
+    }
 }, 10000);
 
 app.get('/', (req, res) => {
@@ -99,7 +119,18 @@ app.get('/', (req, res) => {
     } else {
         res.json(true);
     }
+})
 
+app.get('/articleUrl', (req, res) => {
+    var resultUrl = articleUrlArray.shift();
+    if (resultUrl && resultUrl.url) {
+        updateUrl(resultUrl.url, {
+            isArticle: true
+        });
+        res.json(resultUrl)
+    } else {
+        res.json(true);
+    }
 })
 
 app.post('/save', (req, res) => {
